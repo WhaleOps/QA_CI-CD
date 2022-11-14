@@ -1644,13 +1644,1115 @@
 							"response": []
 						},
 						{
-							"name": "1.1-11删除项目成功",
+							"name": "1.1-13搜索项目成功-搜索项目全称",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"修改项目失败-名称超长\", function () {",
+											"pm.test(\"创建项目\", function () {",
+											"    ",
+											"    var jsonData = pm.response.json(); ",
+											"    pm.environment.set(\"project_name_user_case\",jsonData.data.totalList[0].name);",
+											"    pm.expect(jsonData.msg).to.eql(\"成功\");  ",
+											"    pm.expect(jsonData.data.totalList[0].userName).to.eql(\"admin\");  ",
+											"    ",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true
+								},
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}};language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "Pragma",
+										"value": "no-cache",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects?pageSize=10&pageNo=1&searchVal={{project_name_user_case}}",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects"
+									],
+									"query": [
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "pageNo",
+											"value": "1"
+										},
+										{
+											"key": "searchVal",
+											"value": "{{project_name_user_case}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-14搜索项目成功-模糊搜索项目",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"创建项目\", function () {",
+											"    ",
+											"    var jsonData = pm.response.json(); ",
+											"    pm.environment.set(\"project_name_user_case\",jsonData.data.totalList[0].name);",
+											"    pm.expect(jsonData.msg).to.eql(\"成功\");  ",
+											"    pm.expect(jsonData.data.totalList[0].userName).to.eql(\"admin\");  ",
+											"    ",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true
+								},
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}};language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "Pragma",
+										"value": "no-cache",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects?pageSize=10&pageNo=1&searchVal=业务用例",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects"
+									],
+									"query": [
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "pageNo",
+											"value": "1"
+										},
+										{
+											"key": "searchVal",
+											"value": "业务用例"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-15搜索项目失败-搜索不存在的项目",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"创建项目\", function () {",
+											"    ",
+											"    var jsonData = pm.response.json(); ",
+											"    ",
+											"    pm.expect(jsonData.msg).to.eql(\"成功\");  ",
+											"    pm.expect(jsonData.data.totalList).to.eql([]);  ",
+											"    ",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true
+								},
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}};language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "Pragma",
+										"value": "no-cache",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects?pageSize=10&pageNo=1&searchVal=不存在的项目",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects"
+									],
+									"query": [
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "pageNo",
+											"value": "1"
+										},
+										{
+											"key": "searchVal",
+											"value": "不存在的项目"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-17-1删除项目失败-存在已上线的项目-获取_genNum",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"获取genNum\", function () {",
+											" ",
+											"var jsonData = pm.response.json();",
+											"pm.expect(jsonData.msg).to.eql(\"成功\");",
+											"pm.environment.set(\"gen_num_id_0\",jsonData.data[0]);",
+											"pm.environment.set(\"gen_num_id_1\",jsonData.data[1]);",
+											"pm.environment.set(\"gen_num_id_2\",jsonData.data[2]);",
+											"pm.environment.set(\"gen_num_id_3\",jsonData.data[3]);",
+											"",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}}; language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code_case_01}}/task-definition/gen-task-codes?genNum=4",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects",
+										"{{project_code_case_01}}",
+										"task-definition",
+										"gen-task-codes"
+									],
+									"query": [
+										{
+											"key": "genNum",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-17-2删除项目失败-存在已上线的项目-创建_condition类型",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"创建_condition类型-单条件成功\", function () {",
+											"",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.msg).to.eql(\"成功\");   ",
+											"    pm.expect(jsonData.data.name).to.eql(pm.environment.get(\"user_case_worker_flow_condition_test_01\"));   ",
+											"    pm.environment.set(\"process_definition_code\",jsonData.data.code);",
+											"",
+											"    var process_definition_code = pm.environment.get(\"process_definition_code\");",
+											"    console.log(\"当前 process_definition_code \"+ process_definition_code);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}}; language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "taskDefinitionJson",
+											"value": "[{\"id\":57,\"code\":{{gen_num_id_0}},\"name\":\"condition类型\",\"version\":2,\"description\":\"\",\"userId\":1,\"taskType\":\"CONDITIONS\",\"taskParams\":{\"localParams\":[],\"resourceList\":[],\"dependence\":{\"relation\":\"AND\",\"dependTaskList\":[{\"relation\":\"AND\",\"dependItemList\":[{\"depTaskCode\":{{gen_num_id_1}},\"status\":\"SUCCESS\"}]}]},\"conditionResult\":{\"successNode\":[{{gen_num_id_2}}],\"failedNode\":[{{gen_num_id_3}}]}},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-02 20:52:27\",\"updateTime\":\"2022-08-02 20:54:31\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-02 20:54:31\",\"dependence\":\"{\\\"relation\\\":\\\"AND\\\",\\\"dependTaskList\\\":[{\\\"relation\\\":\\\"AND\\\",\\\"dependItemList\\\":[{\\\"depTaskCode\\\":{{gen_num_id_1}},\\\"status\\\":\\\"SUCCESS\\\"}]}]}\"},\n{\"id\":58,\"code\":{{gen_num_id_1}},\"name\":\"条件1\",\"version\":2,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"这是condition的输入条件\\\"\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-02 20:52:27\",\"updateTime\":\"2022-08-02 20:54:31\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-02 20:54:31\",\"dependence\":\"\"},\n{\"id\":59,\"code\":{{gen_num_id_2}},\"name\":\"结果-成功\",\"version\":2,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"这是condition 成功结果\\\"\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-02 20:52:27\",\"updateTime\":\"2022-08-02 20:54:31\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-02 20:54:31\",\"dependence\":\"\"},\n{\"id\":60,\"code\":{{gen_num_id_3}},\"name\":\"结果-失败\",\"version\":2,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"这是condition 失败结果\\\"\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-02 20:52:27\",\"updateTime\":\"2022-08-02 20:54:31\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-02 20:54:31\",\"dependence\":\"\"}]"
+										},
+										{
+											"key": "taskRelationJson",
+											"value": "[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{gen_num_id_1}},\"postTaskVersion\":2,\"conditionType\":\"NONE\",\"conditionParams\":{}},{\"name\":\"\",\"preTaskCode\":{{gen_num_id_0}},\"preTaskVersion\":2,\"postTaskCode\":{{gen_num_id_2}},\"postTaskVersion\":2,\"conditionType\":\"NONE\",\"conditionParams\":{}},{\"name\":\"\",\"preTaskCode\":{{gen_num_id_0}},\"preTaskVersion\":2,\"postTaskCode\":{{gen_num_id_3}},\"postTaskVersion\":2,\"conditionType\":\"NONE\",\"conditionParams\":{}},{\"name\":\"\",\"preTaskCode\":{{gen_num_id_1}},\"preTaskVersion\":2,\"postTaskCode\":{{gen_num_id_0}},\"postTaskVersion\":2,\"conditionType\":\"NONE\",\"conditionParams\":{}}]"
+										},
+										{
+											"key": "locations",
+											"value": "[{\"taskCode\":{{gen_num_id_0}},\"x\":348,\"y\":149},{\"taskCode\":{{gen_num_id_1}},\"x\":27,\"y\":149},{\"taskCode\":{{gen_num_id_2}},\"x\":694,\"y\":149},{\"taskCode\":{{gen_num_id_3}},\"x\":694,\"y\":247}]"
+										},
+										{
+											"key": "name",
+											"value": "{{user_case_worker_flow_condition_test_01}}"
+										},
+										{
+											"key": "tenantCode",
+											"value": "default"
+										},
+										{
+											"key": "otherParamsJson",
+											"value": "{\"labelCodes\":\"\"}"
+										},
+										{
+											"key": "executionType",
+											"value": "PARALLEL"
+										},
+										{
+											"key": "description",
+											"value": ""
+										},
+										{
+											"key": "globalParams",
+											"value": "[]"
+										},
+										{
+											"key": "timeout",
+											"value": "0"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code_case_01}}/process-definition",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects",
+										"{{project_code_case_01}}",
+										"process-definition"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-17-3删除项目失败-存在已上线的项目-上线_condition类型",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"上线 condition类型\", function () {",
+											"",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.msg).to.eql(\"成功\");   ",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}}; language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code_case_01}}/process-definition/{{process_definition_code}}/release?name={{user_case_worker_flow_condition_test_01}}&releaseState=ONLINE",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects",
+										"{{project_code_case_01}}",
+										"process-definition",
+										"{{process_definition_code}}",
+										"release"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{user_case_worker_flow_condition_test_01}}"
+										},
+										{
+											"key": "releaseState",
+											"value": "ONLINE"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-17-4删除项目失败-存在已上线的项目",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"删除项目成功\", function () {",
+											"",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.data).to.eql(null);  ",
+											"    pm.expect(jsonData.msg).to.eql('请先删除全部工作流定义');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true
+								}
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}};language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "Pragma",
+										"value": "no-cache",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code_case_01}}",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects",
+										"{{project_code_case_01}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-17-5删除项目失败-存在已上线的项目-下线_condition类型",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"上线 condition类型\", function () {",
+											"",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.msg).to.eql(\"成功\");   ",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}}; language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code_case_01}}/process-definition/{{process_definition_code}}/release?name={{user_case_worker_flow_condition_test_01}}&releaseState=OFFLINE",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects",
+										"{{project_code_case_01}}",
+										"process-definition",
+										"{{process_definition_code}}",
+										"release"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{user_case_worker_flow_condition_test_01}}"
+										},
+										{
+											"key": "releaseState",
+											"value": "OFFLINE"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-17-6删除项目失败-存在已上线的项目-删除_condition类型",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"删除项目成功\", function () {",
+											"",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.data).to.eql(null);  ",
+											"    pm.expect(jsonData.code).to.eql(0);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"connection": true,
+									"accept-encoding": true,
+									"accept": true,
+									"user-agent": true,
+									"host": true
+								}
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json, text/plain, */*",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate",
+										"type": "text"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "zh-CN,zh;q=0.9",
+										"type": "text"
+									},
+									{
+										"key": "Connection",
+										"value": "keep-alive",
+										"type": "text"
+									},
+									{
+										"key": "Cookie",
+										"value": "sessionId={{session_id}};language=zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Host",
+										"value": "{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "language",
+										"value": "zh_CN",
+										"type": "text"
+									},
+									{
+										"key": "Origin",
+										"value": "http://{{apitest_url}}:{{apitest_port}}",
+										"type": "text"
+									},
+									{
+										"key": "Referer",
+										"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
+										"type": "text"
+									},
+									{
+										"key": "sessionId",
+										"value": "{{session_id}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									},
+									{
+										"key": "Pragma",
+										"value": "no-cache",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code_case_01}}/process-definition/{{process_definition_code}}",
+									"protocol": "http",
+									"host": [
+										"{{apitest_url}}"
+									],
+									"port": "{{apitest_port}}",
+									"path": [
+										"dolphinscheduler",
+										"projects",
+										"{{project_code_case_01}}",
+										"process-definition",
+										"{{process_definition_code}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.1-16删除项目成功",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"删除项目成功\", function () {",
 											"",
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData.data).to.eql(null);  ",
@@ -15238,73 +16340,52 @@
 															}
 														}
 													],
-													"protocolProfileBehavior": {
-														"disabledSystemHeaders": {
-															"content-type": true,
-															"host": true,
-															"user-agent": true,
-															"accept": true,
-															"accept-encoding": true,
-															"connection": true
-														}
-													},
 													"request": {
 														"method": "POST",
 														"header": [
 															{
 																"key": "Accept",
-																"value": " application/json, text/plain, */*",
+																"value": "application/json, text/plain, */*",
 																"type": "text"
 															},
 															{
 																"key": "Accept-Encoding",
-																"value": " gzip, deflate",
+																"value": "gzip, deflate",
 																"type": "text"
 															},
 															{
 																"key": "Accept-Language",
-																"value": " zh-CN,zh;q=0.9",
+																"value": "zh-CN,zh;q=0.9",
 																"type": "text"
 															},
 															{
 																"key": "Connection",
-																"value": " keep-alive",
-																"type": "text"
-															},
-															{
-																"key": "Content-Length",
-																"value": "325",
-																"type": "text",
-																"disabled": true
-															},
-															{
-																"key": "Content-Type",
-																"value": " application/json;",
+																"value": "keep-alive",
 																"type": "text"
 															},
 															{
 																"key": "Cookie",
-																"value": " sessionId={{session_id}}; language=zh_CN",
+																"value": "sessionId={{session_id}}; language=zh_CN",
 																"type": "text"
 															},
 															{
 																"key": "Host",
-																"value": " {{apitest_url}}:{{apitest_port}}",
+																"value": "{{apitest_url}}:{{apitest_port}}",
 																"type": "text"
 															},
 															{
 																"key": "language",
-																"value": " zh_CN",
+																"value": "zh_CN",
 																"type": "text"
 															},
 															{
 																"key": "Origin",
-																"value": " http:// {{apitest_url}}::{{apitest_port}}",
+																"value": "http://{{apitest_url}}:{{apitest_port}}",
 																"type": "text"
 															},
 															{
 																"key": "Referer",
-																"value": " http:// {{apitest_url}}::{{apitest_port}}/dolphinscheduler/ui/datasource",
+																"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
 																"type": "text"
 															},
 															{
@@ -15314,22 +16395,13 @@
 															},
 															{
 																"key": "User-Agent",
-																"value": " Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+																"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/alert-plugin-instances?instanceName=飞书实例&pluginDefineId={{feishu_type_id}}&pluginInstanceParams=[{\"props\":null,\"field\":\"WarningType\",\"name\":\"告警类型\",\"type\":\"radio\",\"title\":\"warningType\",\"value\":\"all\",\"validate\":[{\"required\":true,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null,\"options\":[{\"label\":\"success\",\"value\":\"success\",\"disabled\":false},{\"label\":\"failure\",\"value\":\"failure\",\"disabled\":false},{\"label\":\"all\",\"value\":\"all\",\"disabled\":false}]},{\"props\":null,\"field\":\"WebHook\",\"name\":\"Web钩子\",\"type\":\"input\",\"title\":\"$t('webhook')\",\"value\":\"https://open.feishu.cn/open-apis/bot/v2/hook/bf71e0db-0642-43da-9912-53e0d25b655c\",\"validate\":[{\"required\":true,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null},{\"props\":null,\"field\":\"IsEnableProxy\",\"name\":\"启用代理\",\"type\":\"radio\",\"title\":\"$t('isEnableProxy')\",\"value\":\"false\",\"validate\":[{\"required\":false,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null,\"options\":[{\"label\":\"YES\",\"value\":\"true\",\"disabled\":false},{\"label\":\"NO\",\"value\":\"false\",\"disabled\":false}]},{\"props\":null,\"field\":\"Proxy\",\"name\":\"代理\",\"type\":\"input\",\"title\":\"$t('proxy')\",\"validate\":[{\"required\":false,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null},{\"props\":null,\"field\":\"Port\",\"name\":\"端口\",\"type\":\"input\",\"title\":\"$t('port')\",\"validate\":[{\"required\":false,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null},{\"props\":null,\"field\":\"User\",\"name\":\"用户\",\"type\":\"input\",\"title\":\"$t('user')\",\"validate\":[{\"required\":false,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null},{\"field\":\"Password\",\"name\":\"密码\",\"props\":{\"disabled\":null,\"placeholder\":\"if enable use authentication, you need input password\",\"size\":\"small\"},\"type\":\"input\",\"title\":\"$t('password')\",\"validate\":null,\"emit\":null}]",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"alert-plugin-instances"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "instanceName",
 																	"value": "飞书实例"
@@ -15342,6 +16414,18 @@
 																	"key": "pluginInstanceParams",
 																	"value": "[{\"props\":null,\"field\":\"WarningType\",\"name\":\"告警类型\",\"type\":\"radio\",\"title\":\"warningType\",\"value\":\"all\",\"validate\":[{\"required\":true,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null,\"options\":[{\"label\":\"success\",\"value\":\"success\",\"disabled\":false},{\"label\":\"failure\",\"value\":\"failure\",\"disabled\":false},{\"label\":\"all\",\"value\":\"all\",\"disabled\":false}]},{\"props\":null,\"field\":\"WebHook\",\"name\":\"Web钩子\",\"type\":\"input\",\"title\":\"$t('webhook')\",\"value\":\"https://open.feishu.cn/open-apis/bot/v2/hook/bf71e0db-0642-43da-9912-53e0d25b655c\",\"validate\":[{\"required\":true,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null},{\"props\":null,\"field\":\"IsEnableProxy\",\"name\":\"启用代理\",\"type\":\"radio\",\"title\":\"$t('isEnableProxy')\",\"value\":\"false\",\"validate\":[{\"required\":false,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null,\"options\":[{\"label\":\"YES\",\"value\":\"true\",\"disabled\":false},{\"label\":\"NO\",\"value\":\"false\",\"disabled\":false}]},{\"props\":null,\"field\":\"Proxy\",\"name\":\"代理\",\"type\":\"input\",\"title\":\"$t('proxy')\",\"validate\":[{\"required\":false,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null},{\"props\":null,\"field\":\"Port\",\"name\":\"端口\",\"type\":\"input\",\"title\":\"$t('port')\",\"validate\":[{\"required\":false,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null},{\"props\":null,\"field\":\"User\",\"name\":\"用户\",\"type\":\"input\",\"title\":\"$t('user')\",\"validate\":[{\"required\":false,\"type\":\"string\",\"trigger\":\"blur\",\"min\":null,\"max\":null}],\"emit\":null},{\"field\":\"Password\",\"name\":\"密码\",\"props\":{\"disabled\":null,\"placeholder\":\"if enable use authentication, you need input password\",\"size\":\"small\"},\"type\":\"input\",\"title\":\"$t('password')\",\"validate\":null,\"emit\":null}]"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/alert-plugin-instances",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"alert-plugin-instances"
 															]
 														}
 													},
@@ -15886,20 +16970,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":\"\",\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"告警组shell\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[],\"rawScript\":\"sleep 70\\necho \\\"告警组shell\\\"\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":1,\"timeoutFlag\":\"OPEN\",\"timeoutNotifyStrategy\":\"WARN\",\"workerGroup\":\"default\",\"version\":3,\"id\":40}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":1,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":103,\"y\":33}]&name={{user_case_worker_flow_alert_group_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":\"\",\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"告警组shell\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[],\"rawScript\":\"sleep 70\\necho \\\"告警组shell\\\"\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":1,\"timeoutFlag\":\"OPEN\",\"timeoutNotifyStrategy\":\"WARN\",\"workerGroup\":\"default\",\"version\":3,\"id\":40}]"
@@ -15940,6 +17013,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -16064,8 +17151,8 @@
 																	"    var jsonData = pm.response.json();",
 																	"    pm.expect(jsonData.msg).to.eql(\"成功\");   ",
 																	"    setTimeout(()=>{",
-																	"    console.log(\"sleep 70秒:\");",
-																	"    }, 70000);  ",
+																	"    console.log(\"sleep 75秒:\");",
+																	"    }, 75000);  ",
 																	"",
 																	"",
 																	"});",
@@ -16645,20 +17732,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"id\":57,\"code\":{{task_codes_0}},\"name\":\"禁用shell\",\"version\":1,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"禁用shell\\\"\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"{{task_instance_flag}}\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":6409740876192,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-04 19:46:56\",\"updateTime\":\"2022-08-04 19:46:56\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-04 19:46:56\",\"dependence\":\"\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":1,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":103,\"y\":33}]&name={{user_case_worker_flow_disable_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\",\"cardCode\":null}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"id\":57,\"code\":{{task_codes_0}},\"name\":\"禁用shell\",\"version\":1,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"禁用shell\\\"\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"{{task_instance_flag}}\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":6409740876192,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-04 19:46:56\",\"updateTime\":\"2022-08-04 19:46:56\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-04 19:46:56\",\"dependence\":\"\"}]"
@@ -16699,6 +17775,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -17454,72 +18544,54 @@
 														}
 													],
 													"protocolProfileBehavior": {
-														"disabledSystemHeaders": {
-															"content-type": true,
-															"host": true,
-															"user-agent": true,
-															"accept": true,
-															"accept-encoding": true,
-															"connection": true
-														}
+														"disabledSystemHeaders": {}
 													},
 													"request": {
 														"method": "POST",
 														"header": [
 															{
 																"key": "Accept",
-																"value": " application/json, text/plain, */*",
+																"value": "application/json, text/plain, */*",
 																"type": "text"
 															},
 															{
 																"key": "Accept-Encoding",
-																"value": " gzip, deflate",
+																"value": "gzip, deflate",
 																"type": "text"
 															},
 															{
 																"key": "Accept-Language",
-																"value": " zh-CN,zh;q=0.9",
+																"value": "zh-CN,zh;q=0.9",
 																"type": "text"
 															},
 															{
 																"key": "Connection",
-																"value": " keep-alive",
-																"type": "text"
-															},
-															{
-																"key": "Content-Length",
-																"value": "325",
-																"type": "text",
-																"disabled": true
-															},
-															{
-																"key": "Content-Type",
-																"value": " application/json;",
+																"value": "keep-alive",
 																"type": "text"
 															},
 															{
 																"key": "Cookie",
-																"value": " sessionId={{session_id}}; language=zh_CN",
+																"value": "sessionId={{session_id}}; language=zh_CN",
 																"type": "text"
 															},
 															{
 																"key": "Host",
-																"value": " {{apitest_url}}:{{apitest_port}}",
+																"value": "{{apitest_url}}:{{apitest_port}}",
 																"type": "text"
 															},
 															{
 																"key": "language",
-																"value": " zh_CN",
+																"value": "zh_CN",
 																"type": "text"
 															},
 															{
 																"key": "Origin",
-																"value": " http:// {{apitest_url}}::{{apitest_port}}",
+																"value": "http://{{apitest_url}}:{{apitest_port}}",
 																"type": "text"
 															},
 															{
 																"key": "Referer",
-																"value": " http:// {{apitest_url}}::{{apitest_port}}/dolphinscheduler/ui/datasource",
+																"value": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/ui/login",
 																"type": "text"
 															},
 															{
@@ -17529,23 +18601,13 @@
 															},
 															{
 																"key": "User-Agent",
-																"value": " Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+																"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/environment/create?name={{user_case_worker_flow_environment_test}}&config=export \"环境名称\"&description=&workerGroups=[\"default\"]",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"environment",
-																"create"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "name",
 																	"value": "{{user_case_worker_flow_environment_test}}"
@@ -17562,6 +18624,19 @@
 																	"key": "workerGroups",
 																	"value": "[\"default\"]"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/environment/create",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"environment",
+																"create"
 															]
 														}
 													},
@@ -17762,20 +18837,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":{{task_instance_environment_code}},\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"环境\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"环境引用\\\"\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":152,\"y\":56}]&name={{user_case_worker_flow_environment_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":{{task_instance_environment_code}},\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"环境\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"环境引用\\\"\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]"
@@ -17816,6 +18880,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -19031,31 +20109,20 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[\n{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell1\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":1,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell1,优先级1\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_1}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell2\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":2,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell2,优先级2\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_2}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell4\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":4,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell4,优先级4\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_3}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell3\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":3,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell3,优先级3\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}\n]&taskRelationJson=[\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_1}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_2}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_3}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}}\n]&locations=[\n{\"taskCode\":{{task_codes_0}},\"x\":293,\"y\":79},\n{\"taskCode\":{{task_codes_1}},\"x\":580,\"y\":90},\n{\"taskCode\":{{task_codes_2}},\"x\":600,\"y\":170},\n{\"taskCode\":{{task_codes_3}},\"x\":330,\"y\":180}\n]&name={{user_case_worker_flow_capacity_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
-																	"value": "[\n{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell1\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":1,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell1,优先级1\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_1}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell2\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":2,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell2,优先级2\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_2}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell4\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":4,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell4,优先级4\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_3}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell3\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":3,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell3,优先级3\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}\n]"
+																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell1\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":1,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell1,优先级1\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_1}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell2\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":2,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell2,优先级2\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_2}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell4\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":4,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell4,优先级4\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"},\n{\"code\":{{task_codes_3}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell3\",\"taskGroupId\":{{task_instance_task_group_id}},\"taskGroupPriority\":3,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"shell3,优先级3\\\"\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}\n]"
 																},
 																{
 																	"key": "taskRelationJson",
-																	"value": "[\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_1}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_2}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_3}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}}\n]"
+																	"value": "[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_1}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_2}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}},\n{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_3}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}}\n]"
 																},
 																{
 																	"key": "locations",
-																	"value": "[\n{\"taskCode\":{{task_codes_0}},\"x\":293,\"y\":79},\n{\"taskCode\":{{task_codes_1}},\"x\":580,\"y\":90},\n{\"taskCode\":{{task_codes_2}},\"x\":600,\"y\":170},\n{\"taskCode\":{{task_codes_3}},\"x\":330,\"y\":180}\n]"
+																	"value": "[{\"taskCode\":{{task_codes_0}},\"x\":293,\"y\":79},\n{\"taskCode\":{{task_codes_1}},\"x\":580,\"y\":90},\n{\"taskCode\":{{task_codes_2}},\"x\":600,\"y\":170},\n{\"taskCode\":{{task_codes_3}},\"x\":330,\"y\":180}\n]"
 																},
 																{
 																	"key": "name",
@@ -19085,6 +20152,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -19279,7 +20360,7 @@
 															}
 														],
 														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?pageSize=10&pageNo=1&searchVal={{user_case_worker_flow_capacity_test}}&otherParamsJson={\"releaseState\":\"\"}",
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?pageSize=10&pageNo=1&searchVal={{user_case_worker_flow_capacity_test}}&otherParamsJson={{other_params_json}}",
 															"protocol": "http",
 															"host": [
 																"{{apitest_url}}"
@@ -19306,7 +20387,7 @@
 																},
 																{
 																	"key": "otherParamsJson",
-																	"value": "{\"releaseState\":\"\"}"
+																	"value": "{{other_params_json}}"
 																}
 															]
 														}
@@ -20288,20 +21369,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"name\":\"资源调用\",\"version\":1,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"资源调用\\\"\\nsh source.sh\",\"resourceList\":[{\"id\":{{task_instance_resource_id}}}]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"{{task_instance_resource_id}}\",\"createTime\":\"2022-08-02 15:04:56\",\"updateTime\":\"2022-08-02 15:04:56\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-02 15:04:56\",\"dependence\":\"\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":1,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":117,\"y\":41}]&name={{user_case_worker_flow_source_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"name\":\"资源调用\",\"version\":1,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"资源调用\\\"\\nsh source.sh\",\"resourceList\":[{\"id\":{{task_instance_resource_id}}}]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"{{task_instance_resource_id}}\",\"createTime\":\"2022-08-02 15:04:56\",\"updateTime\":\"2022-08-02 15:04:56\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-02 15:04:56\",\"dependence\":\"\"}]"
@@ -20342,6 +21412,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -20466,8 +21550,8 @@
 																	"    var jsonData = pm.response.json();",
 																	"    pm.expect(jsonData.msg).to.eql(\"成功\");   ",
 																	"    setTimeout(()=>{",
-																	"    console.log(\"sleep 2秒:\");",
-																	"    }, 2000);      ",
+																	"    console.log(\"sleep 4秒:\");",
+																	"    }, 4000);      ",
 																	"});",
 																	""
 																],
@@ -21313,20 +22397,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"串行等待\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo '串行等待'\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations= [{\"taskCode\":{{task_codes_0}},\"x\":151,\"y\":40}]&name={{user_case_worker_flow_serial_wait_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=SERIAL_WAIT&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"串行等待\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo '串行等待'\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]"
@@ -21367,6 +22440,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -22511,20 +23598,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"串行优先\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo '串行优先'\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations= [{\"taskCode\":{{task_codes_0}},\"x\":151,\"y\":40}]&name={{user_case_worker_flow_serial_priority_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=SERIAL_PRIORITY&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"串行优先\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo '串行优先'\\nsleep 60\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]"
@@ -22565,6 +23641,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -23104,7 +24194,7 @@
 															}
 														],
 														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-instances?pageNo=1&pageSize=10&searchVal={{user_case_worker_flow_serial_priority_test}}&executorName=&host=&stateType=&startDate=&endDate=&otherParamsJson=",
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-instances?pageNo=1&pageSize=10&searchVal={{user_case_worker_flow_serial_priority_test}}&executorName=&host=&stateType=&startDate=&endDate=&otherParamsJson={{other_params_json}}",
 															"protocol": "http",
 															"host": [
 																"{{apitest_url}}"
@@ -23151,7 +24241,7 @@
 																},
 																{
 																	"key": "otherParamsJson",
-																	"value": ""
+																	"value": "{{other_params_json}}"
 																}
 															]
 														}
@@ -23599,20 +24689,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"重跑历史\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo '重跑历史'\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations= [{\"taskCode\":{{task_codes_0}},\"x\":151,\"y\":40}]&name={{user_case_worker_flow_retry_his_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=SERIAL_PRIORITY&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"重跑历史\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo '重跑历史'\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]"
@@ -23653,6 +24732,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -24460,21 +25553,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-instances/{{instance_his_first_id}}?syncDefine=false&globalParams=[]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":151,\"y\":40}]&taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"重跑历史\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo '重跑历史'\\necho '重跑历史version1'\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\",\"version\":1,\"id\":1}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":1,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&tenantCode=default&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-instances",
-																"{{instance_his_first_id}}"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "syncDefine",
 																	"value": "false"
@@ -24503,6 +25584,21 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-instances/{{instance_his_first_id}}",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-instances",
+																"{{instance_his_first_id}}"
 															]
 														}
 													},
@@ -25176,20 +26272,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"id\":1,\"code\":{{task_codes_0}},\"name\":\"重试\",\"version\":2,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo-失败重试\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":{{task_instance_fail_retry_times}},\"failRetryInterval\":{{task_instance_fail_retry_interval}},\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-04 20:51:10\",\"updateTime\":\"2022-08-04 20:52:09\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-04 20:52:09\",\"dependence\":\"\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":2,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":152,\"y\":56}]&name={{user_case_worker_flow_fail_retry_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"id\":1,\"code\":{{task_codes_0}},\"name\":\"重试\",\"version\":2,\"description\":\"\",\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo-失败重试\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":{{task_instance_fail_retry_times}},\"failRetryInterval\":{{task_instance_fail_retry_interval}},\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-04 20:51:10\",\"updateTime\":\"2022-08-04 20:52:09\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-04 20:52:09\",\"dependence\":\"\"}]"
@@ -25230,6 +26315,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -26443,20 +27542,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"worker分组\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"worker分组\\\"\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"admin-worker分组\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":0,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":128,\"y\":35}]&name={{user_case_worker_flow_worker_group_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"worker分组\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"worker分组\\\"\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"admin-worker分组\"}]"
@@ -26497,6 +27585,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -27360,20 +28462,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"内置参数\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[{\"prop\":\"data\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"${system.biz.date}\"},{\"prop\":\"curdate\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"${system.biz.curdate}\"},{\"prop\":\"datetime\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"${system.datetime}\"}],\"rawScript\":\"echo ${data}\\necho ${curdate}\\necho ${datetime}\\n\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\",\"version\":5,\"id\":17}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":5,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":128,\"y\":35}]&name={{user_case_worker_flow_inner_param_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"内置参数\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[{\"prop\":\"data\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"${system.biz.date}\"},{\"prop\":\"curdate\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"${system.biz.curdate}\"},{\"prop\":\"datetime\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"${system.datetime}\"}],\"rawScript\":\"echo ${data}\\necho ${curdate}\\necho ${datetime}\\n\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\",\"version\":5,\"id\":17}]"
@@ -27414,6 +28505,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -28399,20 +29504,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"超时失败\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"超时失败\\\"\\nsleep 70\\n\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":1,\"timeoutFlag\":\"OPEN\",\"timeoutNotifyStrategy\":\"FAILED\",\"workerGroup\":\"default\",\"version\":8,\"id\":20}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":8,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":128,\"y\":35}]&name={{user_case_worker_flow_time_out_alert_fail_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"超时失败\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"超时失败\\\"\\nsleep 70\\n\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":1,\"timeoutFlag\":\"OPEN\",\"timeoutNotifyStrategy\":\"FAILED\",\"workerGroup\":\"default\",\"version\":8,\"id\":20}]"
@@ -28453,6 +29547,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -29564,20 +30672,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"1\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"延迟执行\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"延迟执行\\\"\\n\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\",\"version\":12,\"id\":26}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":12,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":128,\"y\":35}]&name={{user_case_worker_flow_delay_exc_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"1\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"延迟执行\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"延迟执行\\\"\\n\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\",\"version\":12,\"id\":26}]"
@@ -29618,6 +30715,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -30759,20 +31870,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"局部优先级\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[{\"prop\":\"p1\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"局部参数abc\"}],\"rawScript\":\"echo \\\"局部优先级\\\"\\necho ${p1}\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\",\"version\":18,\"id\":32}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":18,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":128,\"y\":35}]&name={{user_case_worker_flow_part_param_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=[{\"prop\":\"p1\",\"value\":\"局部参数efg\",\"direct\":\"IN\",\"type\":\"VARCHAR\"}]&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"code\":{{task_codes_0}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"局部优先级\",\"taskGroupId\":null,\"taskGroupPriority\":null,\"taskParams\":{\"localParams\":[{\"prop\":\"p1\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"局部参数abc\"}],\"rawScript\":\"echo \\\"局部优先级\\\"\\necho ${p1}\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\",\"version\":18,\"id\":32}]"
@@ -30813,6 +31913,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -31793,20 +32907,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"id\":13,\"code\":{{task_codes_0}},\"name\":\"是否空跑\",\"version\":3,\"description\":\"\",\"projectCode\":6673624984352,\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[{\"prop\":\"p1\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"123\"}],\"rawScript\":\"echo \\\"是否空跑：是\\\"\",\"resourceList\":[]},\"taskParamList\":[{\"prop\":\"p1\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"123\"}],\"taskParamMap\":{\"p1\":\"123\"},\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-27 11:31:44\",\"updateTime\":\"2022-08-27 11:32:17\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-27 11:32:17\",\"dependence\":\"\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":3,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":120,\"y\":50}]&name={{user_case_worker_flow_is_empty_rum_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\"}&executionType=PARALLEL&description=&globalParams=&timeout=0",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"id\":13,\"code\":{{task_codes_0}},\"name\":\"是否空跑\",\"version\":3,\"description\":\"\",\"projectCode\":6673624984352,\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[{\"prop\":\"p1\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"123\"}],\"rawScript\":\"echo \\\"是否空跑：是\\\"\",\"resourceList\":[]},\"taskParamList\":[{\"prop\":\"p1\",\"direct\":\"IN\",\"type\":\"VARCHAR\",\"value\":\"123\"}],\"taskParamMap\":{\"p1\":\"123\"},\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-08-27 11:31:44\",\"updateTime\":\"2022-08-27 11:32:17\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-08-27 11:32:17\",\"dependence\":\"\"}]"
@@ -31847,6 +32950,20 @@
 																	"key": "timeout",
 																	"value": "0"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -31971,8 +33088,8 @@
 																	"    var jsonData = pm.response.json();",
 																	"    pm.expect(jsonData.msg).to.eql(\"成功\");   ",
 																	"    setTimeout(()=>{",
-																	"    console.log(\"sleep 2秒:\");",
-																	"    }, 2000);  ",
+																	"    console.log(\"sleep 4秒:\");",
+																	"    }, 4000);  ",
 																	"",
 																	"",
 																	"});",
@@ -32041,21 +33158,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/executors/start-process-instance?processDefinitionCode={{process_definition_code}}&startEndTime=2022-05-28T16:00:00.000Z&startEndTime=2022-05-28T16:00:00.000Z&scheduleTime=&failureStrategy=CONTINUE&warningType=NONE&warningGroupId=&execType=START_PROCESS&startNodeList=&taskDependType=TASK_POST&dependentMode=OFF_MODE&runMode=RUN_MODE_SERIAL&processInstancePriority=MEDIUM&workerGroup=default&environmentCode=&startParams={\"p1\":\"456\",\"p2\":\"123\"}&expectedParallelismNumber=&dryRun=1",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"executors",
-																"start-process-instance"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "processDefinitionCode",
 																	"value": "{{process_definition_code}}"
@@ -32128,6 +33233,21 @@
 																	"key": "dryRun",
 																	"value": "1"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/executors/start-process-instance",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"executors",
+																"start-process-instance"
 															]
 														}
 													},
@@ -32829,20 +33949,9 @@
 																"type": "text"
 															}
 														],
-														"url": {
-															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition?taskDefinitionJson=[{\"id\":6,\"code\":{{task_codes_0}},\"name\":\"参数设置\",\"version\":2,\"description\":\"\",\"projectCode\":6885141005344,\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[{\"prop\":\"trans\",\"direct\":\"OUT\",\"type\":\"VARCHAR\",\"value\":\"\"}],\"rawScript\":\"echo '${setValue(trans=hello trans)}'\",\"resourceList\":[]},\"taskParamList\":[{\"prop\":\"trans\",\"direct\":\"OUT\",\"type\":\"VARCHAR\",\"value\":\"\"}],\"taskParamMap\":{\"trans\":\"\"},\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":\"0\",\"failRetryInterval\":\"1\",\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"timeout\":0,\"delayTime\":\"0\",\"resourceIds\":\"\",\"createTime\":\"2022-09-15 13:50:57\",\"updateTime\":\"2022-09-15 13:50:57\",\"modifyBy\":null,\"taskGroupId\":null,\"taskGroupPriority\":null,\"operator\":1,\"operateTime\":\"2022-09-15 13:50:57\",\"dependence\":\"\"},{\"id\":5,\"code\":{{task_codes_1}},\"name\":\"参数接收\",\"version\":1,\"description\":\"\",\"projectCode\":6885141005344,\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo ${trans}\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-09-15 13:50:21\",\"updateTime\":\"2022-09-15 13:50:21\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-09-15 13:50:21\",\"dependence\":\"\"}]&taskRelationJson=[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":{{task_codes_0}},\"postTaskVersion\":2,\"conditionType\":\"NONE\",\"conditionParams\":{}},{\"name\":\"\",\"preTaskCode\":{{task_codes_0}},\"preTaskVersion\":2,\"postTaskCode\":{{task_codes_1}},\"postTaskVersion\":1,\"conditionType\":\"NONE\",\"conditionParams\":{}}]&locations=[{\"taskCode\":{{task_codes_0}},\"x\":114,\"y\":82},{\"taskCode\":{{task_codes_1}},\"x\":404,\"y\":97}]&name={{user_case_worker_flow_set_value_test}}&tenantCode=default&otherParamsJson={\"labelCodes\":\"\",\"cardCode\":null}&executionType=PARALLEL&description=&globalParams=[]&timeout=0&releaseState=OFFLINE",
-															"protocol": "http",
-															"host": [
-																"{{apitest_url}}"
-															],
-															"port": "{{apitest_port}}",
-															"path": [
-																"dolphinscheduler",
-																"projects",
-																"{{project_code}}",
-																"process-definition"
-															],
-															"query": [
+														"body": {
+															"mode": "urlencoded",
+															"urlencoded": [
 																{
 																	"key": "taskDefinitionJson",
 																	"value": "[{\"id\":6,\"code\":{{task_codes_0}},\"name\":\"参数设置\",\"version\":2,\"description\":\"\",\"projectCode\":6885141005344,\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[{\"prop\":\"trans\",\"direct\":\"OUT\",\"type\":\"VARCHAR\",\"value\":\"\"}],\"rawScript\":\"echo '${setValue(trans=hello trans)}'\",\"resourceList\":[]},\"taskParamList\":[{\"prop\":\"trans\",\"direct\":\"OUT\",\"type\":\"VARCHAR\",\"value\":\"\"}],\"taskParamMap\":{\"trans\":\"\"},\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":\"0\",\"failRetryInterval\":\"1\",\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"timeout\":0,\"delayTime\":\"0\",\"resourceIds\":\"\",\"createTime\":\"2022-09-15 13:50:57\",\"updateTime\":\"2022-09-15 13:50:57\",\"modifyBy\":null,\"taskGroupId\":null,\"taskGroupPriority\":null,\"operator\":1,\"operateTime\":\"2022-09-15 13:50:57\",\"dependence\":\"\"},{\"id\":5,\"code\":{{task_codes_1}},\"name\":\"参数接收\",\"version\":1,\"description\":\"\",\"projectCode\":6885141005344,\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo ${trans}\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-09-15 13:50:21\",\"updateTime\":\"2022-09-15 13:50:21\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-09-15 13:50:21\",\"dependence\":\"\"}]"
@@ -32887,6 +33996,20 @@
 																	"key": "releaseState",
 																	"value": "OFFLINE"
 																}
+															]
+														},
+														"url": {
+															"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+															"protocol": "http",
+															"host": [
+																"{{apitest_url}}"
+															],
+															"port": "{{apitest_port}}",
+															"path": [
+																"dolphinscheduler",
+																"projects",
+																"{{project_code}}",
+																"process-definition"
 															]
 														}
 													},
@@ -85266,8 +86389,8 @@
 									"script": {
 										"exec": [
 											"//校验http协议返回状态",
-											"pm.test(\"Status code is 200\", function () {   ",
-											"pm.response.to.have.status(200);",
+											"pm.test(\"Status code is 201\", function () {   ",
+											"pm.response.to.have.status(201);",
 											"});",
 											"//校验业务逻辑返回code",
 											"pm.test(\"checkcode is 0\", function () {   ",
@@ -85406,8 +86529,8 @@
 									"script": {
 										"exec": [
 											"//校验http协议返回状态",
-											"pm.test(\"Status code is 200\", function () {   ",
-											"pm.response.to.have.status(200);",
+											"pm.test(\"Status code is 201\", function () {   ",
+											"pm.response.to.have.status(201);",
 											"});",
 											"//校验业务逻辑返回code",
 											"pm.test(\"checkcode is 0\", function () {   ",
@@ -85953,8 +87076,8 @@
 									"script": {
 										"exec": [
 											"//校验http协议返回状态",
-											"pm.test(\"Status code is 200\", function () {   ",
-											"pm.response.to.have.status(200);",
+											"pm.test(\"Status code is 201\", function () {   ",
+											"pm.response.to.have.status(201);",
 											"});",
 											"//校验业务逻辑返回code",
 											"pm.test(\"checkcode is 0\", function () {   ",
@@ -86473,8 +87596,8 @@
 									"script": {
 										"exec": [
 											"//校验http协议返回状态",
-											"pm.test(\"Status code is 200\", function () {   ",
-											"pm.response.to.have.status(200);",
+											"pm.test(\"Status code is 201\", function () {   ",
+											"pm.response.to.have.status(201);",
 											"});",
 											"//校验业务逻辑返回code",
 											"pm.test(\"checkcode is 0\", function () {   ",
@@ -86993,8 +88116,8 @@
 									"script": {
 										"exec": [
 											"//校验http协议返回状态",
-											"pm.test(\"Status code is 200\", function () {   ",
-											"pm.response.to.have.status(200);",
+											"pm.test(\"Status code is 201\", function () {   ",
+											"pm.response.to.have.status(201);",
 											"});",
 											"//校验业务逻辑返回code",
 											"pm.test(\"checkcode is 0\", function () {   ",
@@ -102593,7 +103716,7 @@
 											"urlencoded": [
 												{
 													"key": "taskDefinitionJson",
-													"value": "[{\"code\":{{task_code1}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":\"\",\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"shell\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"============== start ==========\\\"\\n\\n\\ndate\\n\\n\\necho \\\"============== end ==========\\\"\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]",
+													"value": "[{\"code\":{{task_code1}},\"delayTime\":\"0\",\"description\":\"\",\"environmentCode\":-1,\"failRetryInterval\":\"1\",\"failRetryTimes\":\"0\",\"flag\":\"YES\",\"name\":\"Shell\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"============== start ==========\\\"\\n\\n\\ndate\\n\\n\\necho \\\"============== end ==========\\\"\",\"resourceList\":[]},\"taskPriority\":\"MEDIUM\",\"taskType\":\"SHELL\",\"timeout\":0,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":\"\",\"workerGroup\":\"default\"}]",
 													"type": "text"
 												},
 												{
@@ -102603,7 +103726,7 @@
 												},
 												{
 													"key": "locations",
-													"value": "[{\"taskCode\":{{task_code1}},\"x\":425.5,\"y\":269.5}]",
+													"value": "[{\"taskCode\":{{task_code1}},\"x\":639.5,\"y\":124.5}]",
 													"type": "text"
 												},
 												{
@@ -102829,10 +103952,10 @@
 											]
 										},
 										"url": {
-											"raw": "http://ctyun4:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition/{{workerflow_code1}}/release",
+											"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition/{{workerflow_code1}}/release",
 											"protocol": "http",
 											"host": [
-												"ctyun4"
+												"{{apitest_url}}"
 											],
 											"port": "{{apitest_port}}",
 											"path": [
@@ -103365,10 +104488,10 @@
 											]
 										},
 										"url": {
-											"raw": "http://ctyun4:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition/{{workerflow_code2}}/release",
+											"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition/{{workerflow_code2}}/release",
 											"protocol": "http",
 											"host": [
-												"ctyun4"
+												"{{apitest_url}}"
 											],
 											"port": "{{apitest_port}}",
 											"path": [
@@ -104613,7 +105736,7 @@
 												},
 												{
 													"key": "name",
-													"value": "1111",
+													"value": "shell翻牌工作流",
 													"type": "text"
 												},
 												{
@@ -106858,6 +107981,476 @@
 												{
 													"key": "taskInstanceId",
 													"value": "{{task_instance_id3}}"
+												},
+												{
+													"key": "limit",
+													"value": "1000"
+												},
+												{
+													"key": "skipLineNum",
+													"value": "0"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "5.10.4.1翻牌加补数测试",
+							"item": [
+								{
+									"name": "创建翻牌加补数测试用例工作流",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//校验http协议返回状态",
+													"pm.test(\"Status code is 201\", function () {   ",
+													"pm.response.to.have.status(201);",
+													"});",
+													"//校验业务逻辑返回code",
+													"pm.test(\"checkcode is 0\", function () {   ",
+													"var jsonData = pm.response.json();   ",
+													"pm.expect(jsonData.code).to.eql(0);",
+													"});",
+													"//校验业务返回信息",
+													"pm.test(\"check success is true\", function () {   ",
+													"var jsonData = pm.response.json();  ",
+													"pm.expect(jsonData.success).to.eql(true);",
+													"});",
+													"//设置全局变量",
+													"var Jsondata=JSON.parse(responseBody);",
+													"pm.environment.set(\"workerflow_code1\",Jsondata.data.code);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Connection",
+												"value": "keep-alive",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json;charset=UTF-8",
+												"type": "text"
+											},
+											{
+												"key": "Cookie",
+												"value": "sessionId={{session_id}}; JSESSIONID={{JSESSIONID}}; language=zh_CN",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "taskDefinitionJson",
+													"value": "[{\"id\":16,\"code\":7505492675872,\"name\":\"补数测试\",\"version\":1,\"description\":\"\",\"projectCode\":7504924373536,\"userId\":1,\"taskType\":\"SHELL\",\"taskParams\":{\"localParams\":[],\"rawScript\":\"echo \\\"================= python翻牌读牌 start =========================\\\"\\n\\n\\na=\\\"abc\\\"\\n\\necho ${a}\\n\\necho ${data}\\n\\n\\n\\necho \\\"================= python翻牌读牌 end =========================\\\"\",\"resourceList\":[]},\"taskParamList\":[],\"taskParamMap\":null,\"flag\":\"YES\",\"taskPriority\":\"MEDIUM\",\"userName\":null,\"projectName\":null,\"workerGroup\":\"default\",\"environmentCode\":-1,\"failRetryTimes\":0,\"failRetryInterval\":1,\"timeoutFlag\":\"CLOSE\",\"timeoutNotifyStrategy\":null,\"timeout\":0,\"delayTime\":0,\"resourceIds\":\"\",\"createTime\":\"2022-11-10 16:01:15\",\"updateTime\":\"2022-11-10 16:01:15\",\"modifyBy\":null,\"taskGroupId\":0,\"taskGroupPriority\":0,\"operator\":1,\"operateTime\":\"2022-11-10 16:01:15\",\"dependence\":\"\"}]",
+													"type": "text"
+												},
+												{
+													"key": "taskRelationJson",
+													"value": "[{\"name\":\"\",\"preTaskCode\":0,\"preTaskVersion\":0,\"postTaskCode\":7505492675872,\"postTaskVersion\":1,\"conditionType\":\"NONE\",\"conditionParams\":{}}]",
+													"type": "text"
+												},
+												{
+													"key": "locations",
+													"value": "[{\"taskCode\":7505492675872,\"x\":617.5,\"y\":239.5}]",
+													"type": "text"
+												},
+												{
+													"key": "name",
+													"value": "翻牌加补数测试用例",
+													"type": "text"
+												},
+												{
+													"key": "tenantCode",
+													"value": "default",
+													"type": "text"
+												},
+												{
+													"key": "otherParamsJson",
+													"value": "{\"labelCodes\":\"\",\"cardCode\":{{cards_cardcode3}}}",
+													"type": "text"
+												},
+												{
+													"key": "executionType",
+													"value": "PARALLEL",
+													"type": "text"
+												},
+												{
+													"key": "description",
+													"value": "",
+													"type": "text"
+												},
+												{
+													"key": "globalParams",
+													"value": "[{\"prop\":\"data\",\"value\":\"${cardFormatValue}\",\"direct\":\"IN\",\"type\":\"VARCHAR\"}]",
+													"type": "text"
+												},
+												{
+													"key": "timeout",
+													"value": "0",
+													"type": "text"
+												},
+												{
+													"key": "releaseState",
+													"value": "OFFLINE",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/process-definition",
+											"protocol": "http",
+											"host": [
+												"{{apitest_url}}"
+											],
+											"port": "{{apitest_port}}",
+											"path": [
+												"dolphinscheduler",
+												"projects",
+												"{{project_code}}",
+												"process-definition"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "工作流补数",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//校验http协议返回状态",
+													"pm.test(\"Status code is 200\", function () {   ",
+													"pm.response.to.have.status(200);",
+													"});",
+													"//校验业务逻辑返回code",
+													"pm.test(\"checkcode is 0\", function () {   ",
+													"var jsonData = pm.response.json();   ",
+													"pm.expect(jsonData.code).to.eql(0);",
+													"});",
+													"//校验业务返回信息",
+													"pm.test(\"check success is true\", function () {   ",
+													"var jsonData = pm.response.json();  ",
+													"pm.expect(jsonData.success).to.eql(true);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Connection",
+												"value": "keep-alive",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json;charset=UTF-8",
+												"type": "text"
+											},
+											{
+												"key": "Cookie",
+												"value": "sessionId={{session_id}}; JSESSIONID={{JSESSIONID}}; language=zh_CN",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "processDefinitionCode",
+													"value": "{{workerflow_code1}}",
+													"type": "text"
+												},
+												{
+													"key": "failureStrategy",
+													"value": "CONTINUE",
+													"type": "text"
+												},
+												{
+													"key": "warningType",
+													"value": "NONE",
+													"type": "text"
+												},
+												{
+													"key": "warningGroupId",
+													"value": "",
+													"type": "text"
+												},
+												{
+													"key": "execType",
+													"value": "COMPLEMENT_DATA",
+													"type": "text"
+												},
+												{
+													"key": "startNodeList",
+													"value": "",
+													"type": "text"
+												},
+												{
+													"key": "taskDependType",
+													"value": "TASK_POST",
+													"type": "text"
+												},
+												{
+													"key": "dependentMode",
+													"value": "OFF_MODE",
+													"type": "text"
+												},
+												{
+													"key": "runMode",
+													"value": "RUN_MODE_PARALLEL",
+													"type": "text"
+												},
+												{
+													"key": "processInstancePriority",
+													"value": "MEDIUM",
+													"type": "text"
+												},
+												{
+													"key": "workerGroup",
+													"value": "default",
+													"type": "text"
+												},
+												{
+													"key": "environmentCode",
+													"value": "",
+													"type": "text"
+												},
+												{
+													"key": "startParams",
+													"value": "{\"data\":\"${cardFormatValue}\"}",
+													"type": "text"
+												},
+												{
+													"key": "expectedParallelismNumber",
+													"value": "",
+													"type": "text"
+												},
+												{
+													"key": "dryRun",
+													"value": "0",
+													"type": "text"
+												},
+												{
+													"key": "scheduleTime",
+													"value": "{\"complementStartDate\":\"{{yesterday}} 00:00:00\",\"complementEndDate\":\"{{tomorrow}} 00:00:00\"}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/executors/start-process-instance",
+											"protocol": "http",
+											"host": [
+												"{{apitest_url}}"
+											],
+											"port": "{{apitest_port}}",
+											"path": [
+												"dolphinscheduler",
+												"projects",
+												"{{project_code}}",
+												"executors",
+												"start-process-instance"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "获取最新执行的组件实例id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//校验http协议返回状态",
+													"pm.test(\"Status code is 200\", function () {   ",
+													"pm.response.to.have.status(200);",
+													"});",
+													"//校验业务逻辑返回code",
+													"pm.test(\"checkcode is 0\", function () {   ",
+													"var jsonData = pm.response.json();   ",
+													"pm.expect(jsonData.code).to.eql(0);",
+													"});",
+													"//校验业务返回信息",
+													"pm.test(\"check success is true\", function () {   ",
+													"var jsonData = pm.response.json();  ",
+													"pm.expect(jsonData.success).to.eql(true);",
+													"});",
+													"//校验变量字段为非空",
+													"pm.test(\"check sessionId is not null\", function () { ",
+													"var jsonData = pm.response.json();   ",
+													"pm.expect(jsonData.data.total).to.eql(3);",
+													"});",
+													"//设置全局变量",
+													"var Jsondata=JSON.parse(responseBody);",
+													"pm.environment.set(\"processInstanceid1\",Jsondata.data.totalList[0].id);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.test(\"延迟5秒\", function () {",
+													"    setTimeout(()=>{console.log(\"延迟5秒\");}, 5000);",
+													"    console.log('延迟5秒');",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Connection",
+												"value": "keep-alive",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json;charset=UTF-8",
+												"type": "text"
+											},
+											{
+												"key": "Cookie",
+												"value": "sessionId={{session_id}}; JSESSIONID={{JSESSIONID}}; language=zh_CN",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/projects/{{project_code}}/task-instances?pageSize=10&pageNo=1&searchVal=补数测试&processInstanceName=翻牌加补数测试用例",
+											"protocol": "http",
+											"host": [
+												"{{apitest_url}}"
+											],
+											"port": "{{apitest_port}}",
+											"path": [
+												"dolphinscheduler",
+												"projects",
+												"{{project_code}}",
+												"task-instances"
+											],
+											"query": [
+												{
+													"key": "pageSize",
+													"value": "10"
+												},
+												{
+													"key": "pageNo",
+													"value": "1"
+												},
+												{
+													"key": "searchVal",
+													"value": "补数测试"
+												},
+												{
+													"key": "processInstanceName",
+													"value": "翻牌加补数测试用例"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "shell基础翻牌读牌验证",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//校验http协议返回状态",
+													"pm.test(\"Status code is 200\", function () {",
+													"    pm.response.to.have.status(200);",
+													"});",
+													"//校验业务逻辑返回code",
+													"pm.test(\"checkcode is 0\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.code).to.eql(0);",
+													"});",
+													"//校验业务返回信息",
+													"pm.test(\"check success is true\", function () {",
+													"    var jsonData = pm.response.json();",
+													"    pm.expect(jsonData.success).to.eql(true);",
+													"",
+													"    var tomorrow =pm.environment.get(\"tomorrow\");",
+													"    pm.expect(pm.response.text()).to.include(tomorrow+ \" 00:00:00\");",
+													"});",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"pm.test(\"delay 30s\", function () {",
+													"    setTimeout(()=>{console.log(\"delay 30s\");}, 30000);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Connection",
+												"value": "keep-alive",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json;charset=UTF-8",
+												"type": "text"
+											},
+											{
+												"key": "Cookie",
+												"value": "sessionId={{session_id}}; JSESSIONID={{JSESSIONID}}; language=zh_CN",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://{{apitest_url}}:{{apitest_port}}/dolphinscheduler/log/detail?taskInstanceId={{processInstanceid1}}&limit=1000&skipLineNum=0",
+											"protocol": "http",
+											"host": [
+												"{{apitest_url}}"
+											],
+											"port": "{{apitest_port}}",
+											"path": [
+												"dolphinscheduler",
+												"log",
+												"detail"
+											],
+											"query": [
+												{
+													"key": "taskInstanceId",
+													"value": "{{processInstanceid1}}"
 												},
 												{
 													"key": "limit",
