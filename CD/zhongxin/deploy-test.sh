@@ -8,21 +8,30 @@ define_param(){
 ctyun5="49.7.112.49"
 
 # 定义主目录
-work_father_path="/home/ubuntu/sprint_2209/"
+work_father_path="/data/release/"
 
-# 定义服务器ip
-addr_list=("aws2" "aws3" "aws4" "aws5" "aws6" "aws7" "aws8")
+# 测试环境
+addr_list=("ctyun7" "ctyun9")
+api_list=("ctyun7" "ctyun9")
+alert_list=("ctyun7" "ctyun9")
+master_list=("ctyun7" "ctyun9")
+worker_list=("ctyun7" "ctyun9")
 
-
-# 定义运维脚本
-deploy_sh=$work_father_path"ws_sprint_2209.sh"
-
-# 今日目录定义
-today=`date +%m%d`
+# 定义数据库及zk连接
+mysql_ip="ctyun7"
+zk_ip="ctyun7:2181"
+mysql_user="root"
+mysql_passwd="root@123"
+mysql_database="whalescheduler"
+mysql_port="3306"
 
 # 工具/工作 目录
 tool_path=$work_father_path"tool/"
 work_path=$work_father_path$today
+
+
+# 定义运维脚本
+deploy_sh=$tool_path"deploy.sh"
 
 # 定义压力脚本
 performace_sh=$tool_path"/batch_insert_command.sh"
@@ -30,19 +39,12 @@ performace_clear_sh=$tool_path"/clear_history_process_instance.sh"
 performace_instance="7491908079552 2 10 600"
 performace_collect_sh=$tool_path"/count_sql.sh"
 
-# 定义数据库及zk连接
-mysql_ip="ds-test-mysql.cwkplpl0hwlq.ap-southeast-1.rds.amazonaws.com"
-zk_ip="aws1"
-mysql_user="admin"
-mysql_passwd="adminadmin"
-mysql_database="sprint_2209"
-mysql_port="3306"
-
 
 # 待替换文件
 p_mysql_jar=$tool_path/mysql-connector-java-8.0.16.jar
-p_ojbbc_jar=$tool_path/ojdbc8.jar
+p_ojbc_jar=$tool_path/ojdbc8.jar
 p_common_conf=$tool_path/common.properties
+p_customer_conf=$tool_path/customer-config.yaml
 
 # packge包名定义
 packge_tar=whalescheduler-1.0-SNAPSHOT-bin.tar.gz
@@ -50,6 +52,15 @@ packge=whalescheduler-1.0-SNAPSHOT-bin
 
 
 }
+########################
+# 说明：deploy环境变量生效
+########################
+source_deploy(){
+echo "========== source 环境变量 ========== "
+sed -i '$a\alias deploy="/data/release/tool/deploy.sh"' /etc/profile
+source /etc/profile
+}
+
 
 ########################
 # 说明：将 原始包拷贝到服务器工作目录
@@ -87,13 +98,15 @@ echo "tool目录："$tool_path
 echo "today目录："$today
 echo "work_path目录："$work_path
 echo "p_mysql_jar目录："$p_mysql_jar
-echo "p_ojbbc_jar目录："$p_ojbbc_jar
+echo "p_ojbc_jar目录："$p_ojbc_jar
+echo "p_customer_conf目录:  "$p_customer_conf
 echo "mysql_ip地址："$mysql_ip
 echo "zk_ip地址："$zk_ip
 echo "mysql_user："$mysql_user
 echo "mysql_passwd："$mysql_passwd
 echo "mysql_database："$mysql_database
 echo "mysql_port: "$mysql_port
+
 }
 
 
@@ -101,7 +114,7 @@ echo "mysql_port: "$mysql_port
 # 说明：多台机器执行运维脚本
 # 例：sh ws_sprint_2209.sh allstop
 ########################
-remote_exec(){
+remote_all_exec_command(){
 
 for ip in ${addr_list[@]}
 do
@@ -112,18 +125,22 @@ done
 
 
 
+
 ########################
-# 说明：将aws1 文件拷贝到其他服务器
+# 说明：整体，拷贝文件
 # 例：scp /home/ubuntu/sprint_2209/ws_sprint_2209.sh aws2:/home/ubuntu/sprint_2209/
 ########################
-remote_cp_delopy_script(){
-
+remote_all_cp_file(){
+file=$1
 for ip in ${addr_list[@]}
 do
-	echo scp" "$deploy_sh" "$ip:$work_father_path
-	scp $deploy_sh $ip:$work_father_path
+    cd $tool_path
+    echo scp" "$file" "$ip:$tool_path
+    scp $tool_path$file $ip:tool_path
 done
 }
+
+
 
 
 
@@ -131,44 +148,71 @@ done
 # 说明：启动分布式服务
 # 例：2master+6server
 ########################
-remote_start(){
+remote_all_start(){
 
 for ip in ${addr_list[@]}
 do
 	echo "开始停止：" $ip
 	echo sh" "$ip" "sh" "$deploy_sh" "allstop
 	ssh $ip sh $deploy_sh allstop
+	remote_single_start $ip
 done
-
-ssh aws1 "sh $deploy_sh start api-server"
-ssh aws1 "sh $deploy_sh start master-server"
-ssh aws1 "sh $deploy_sh start worker-server"
-ssh aws2 "sh $deploy_sh start worker-server"
-ssh aws3 "sh $deploy_sh start worker-server"
-ssh aws4 "sh $deploy_sh start worker-server"
-ssh aws5 "sh $deploy_sh start master-server"
-ssh aws5 "sh $deploy_sh start worker-server"
-ssh aws6 "sh $deploy_sh start worker-server"
-ssh aws7 "sh $deploy_sh start worker-server"
-ssh aws8 "sh $deploy_sh start worker-server"
 
 }
 
-
-
 ########################
-# 说明：服务启动时区统一变成+8区
+# 说明：启动分布式服务
 # 例：2master+6server
 ########################
-remote_time_GMT8(){
+remote_single_start(){
+ip=$1
+if [[ "${api_list[@]}" =~ "$ip" ]]
+then
+    ssh $ip "sh $deploy_sh start api-server"
+    ssh $ip "sh $deploy_sh start api-server"
+elif [[ "${worker_list[@]}" =~ "$ip" ]]
+then
+    ssh $ip "sh $deploy_sh start worker-server"
+    ssh $ip "sh $deploy_sh start worker-server"
+elif [[ "${master_list[@]}" =~ "$ip" ]]
+then
+    ssh $ip "sh $deploy_sh start master-server"
+    ssh $ip "sh $deploy_sh start master-server"
+elif [[ "${alert_list[@]}" =~ "$ip" ]]
+then
+    ssh $ip "sh $deploy_sh start alert-server"
+    ssh $ip "sh $deploy_sh start alert-server"
+else
+    echo "ip不在地址池内"
+fi
+}
+
+########################
+# 说明：整体服务器，服务启动时区统一变成+8区
+# 例：2master+6server
+########################
+set_all_GMT8(){
 
 for ip in ${addr_list[@]}
 do
-        echo " ssh " $ip " sed -i 's/-server/-server -Duser.timezone=GMT+08/g' " $work_path"/api-server/bin/start.sh "
+        set_single_GMT8 $ip
+done
+}
+
+########################
+# 说明：单机，启动时区统一变成+8区
+# 例：2master+6server
+########################
+set_single_GMT8(){
+        ip=$1
+        echo ssh $ip \"sed -i \'s/-server/-server -Duser.timezone=GMT+08/g\' $work_path/api-server/bin/start.sh\"
+        echo ssh $ip \"sed -i \'s/-server/-server -Duser.timezone=GMT+08/g\' $work_path/master-server/bin/start.sh\"
+        echo ssh $ip \"sed -i \'s/-server/-server -Duser.timezone=GMT+08/g\' $work_path/worker-server/bin/start.sh\"
+        echo ssh $ip \"sed -i \'s/-server/-server -Duser.timezone=GMT+08/g\' $work_path/alert-server/bin/start.sh\"
         ssh $ip  "sed -i 's/-server/-server -Duser.timezone=GMT+08/g' $work_path/api-server/bin/start.sh"
         ssh $ip  "sed -i 's/-server/-server -Duser.timezone=GMT+08/g' $work_path/master-server/bin/start.sh"
         ssh $ip  "sed -i 's/-server/-server -Duser.timezone=GMT+08/g' $work_path/worker-server/bin/start.sh"
-done
+        ssh $ip  "sed -i 's/-server/-server -Duser.timezone=GMT+08/g' $work_path/alert-server/bin/start.sh"
 }
 
 
@@ -191,41 +235,50 @@ mv $packge $today
 ########################
 conf_server(){
 
+# 定义 lib文件路径
 p_api_lib=$work_path/api-server/libs/
 p_master_lib=$work_path/master-server/libs/
 p_worker_lib=$work_path/worker-server/libs/
 p_alert_lib=$work_path/alert-server/libs/
 p_tools_lib=$work_path/tools/libs/
 p_st_lib=$work_path/standalone-server/libs/
+p_lib_list=("$p_api_lib" "$p_master_lib" "$p_worker_lib" "$p_alert_lib" "$p_tools_lib" "$p_st_lib")
 
-
+# 定义 conf文件路径
 p_api_conf=$work_path/api-server/conf/
 p_master_conf=$work_path/master-server/conf/
 p_worker_conf=$work_path/worker-server/conf/
 p_alert_conf=$work_path/alert-server/conf/
 p_tools_conf=$work_path/tools/conf/
 p_st_conf=$work_path/standalone-server/conf/
+p_conf_list=("$p_api_conf" "$p_master_conf" "$p_worker_conf" "$p_alert_conf" "$p_tools_conf" "$p_st_conf")
 
 
-echo "cp $p_mysql_jar $p_api_lib"
-echo "cp $p_common_conf $p_api_conf"
 
-echo "cp "$p_mysql_jar" "$p_ojbbc_jar" "$p_api_lib
-cp $p_mysql_jar $p_ojbbc_jar $p_api_lib
-cp $p_mysql_jar $p_ojbbc_jar $p_master_lib
-cp $p_mysql_jar $p_ojbbc_jar $p_worker_lib
-cp $p_mysql_jar $p_ojbbc_jar $p_alert_lib
-cp $p_mysql_jar $p_ojbbc_jar $p_tools_lib
-cp $p_mysql_jar $p_ojbbc_jar $p_st_lib
+echo "========== mysql/ojbc 配置替换：开始 ========== "
+for p_lib in ${p_lib_list[@]}
+do
+        echo "cp $p_mysql_jar $p_lib"
+        echo "cp $p_ojbc_jar $p_lib"
+        cp $p_mysql_jar $p_lib
+        cp $p_ojbc_jar $p_lib
+done
+echo "========== mysql/ojbc 配置替换：结束 ========== "
 
 
-cp $p_common_conf $p_api_conf
-cp $p_common_conf $p_master_conf
-cp $p_common_conf $p_worker_conf
-cp $p_common_conf $p_alert_conf
-cp $p_common_conf $p_tools_conf
-cp $p_common_conf $p_st_conf
+echo "========== p_common_conf 配置替换：开始 ========== "
+for p_conf in ${p_conf_list[@]}
+do
+        echo "cp $p_common_conf $p_conf"
+        cp $p_common_conf $p_conf
+done
+echo "========== p_common_conf 配置替换：结束 ========== "
 
+
+echo "========== p_customer_conf 配置替换：开始 ========== "
+        echo "cp $p_customer_conf $p_api_conf"
+        cp $p_customer_conf $p_api_conf
+echo "========== p_customer_conf 配置替换：结束 ========== "
 
 }
 
@@ -241,37 +294,55 @@ sed  -i 's/enabled: true/enabled: false/g' customer-config.yaml
 
 # 修改配置
 cd $work_path/bin/env/
-sed  -i 's/localhost:2181/'$zk_ip':2181/g' whalescheduler_env.sh
+sed  -i 's/localhost:2181/'$zk_ip'/g' whalescheduler_env.sh
 sed -i '$a\export DATABASE="mysql"' whalescheduler_env.sh
 sed -i '$a\export SPRING_DATASOURCE_DRIVER_CLASS_NAME="com.mysql.jdbc.Driver"' whalescheduler_env.sh
 sed -i '$a\export SPRING_DATASOURCE_URL="jdbc:mysql://'$mysql_ip':'$mysql_port'/'$mysql_database'?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true"' whalescheduler_env.sh
 sed -i '$a\export SPRING_DATASOURCE_USERNAME='$mysql_user whalescheduler_env.sh
 sed -i '$a\export SPRING_DATASOURCE_PASSWORD='$mysql_passwd whalescheduler_env.sh
 
-# 修改master-server 内存
-cd $work_path/master-server/bin/
-sed -i 's/Xmn2g/Xmn1g/g' start.sh
+}
 
 
-# 修改worker-server 内存
-cd $work_path/worker-server/bin/
-sed -i 's/Xmn2g/Xmn1g/g' start.sh
+########################
+# 说明：统计相关稳定性指标
+########################
+count_sql(){
 
+count="select count(1) as task_total from t_ds_task_instance;"
+start_time_avg="select start_time as start_time_avg, count(1) from t_ds_task_instance group by start_time order by count(1) desc limit 3;"
+end_time_avg="select end_time as end_time_avg,count(1) from t_ds_task_instance group by end_time order by count(1) desc limit 3;"
+tps_avg="select avg(a) as tps_avg from (select count(1) as a,start_time from t_ds_task_instance group by start_time order by count(1)) as tmp;"
+
+echo "========== 2022-11-17 20:40 开始运行，目前task总量：========== "
+echo "mysql -h"$mysql_ip" -u"$mysql_user+" -p"$mysql_passwd" -D "$mysql_database" -e "$count
+mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$count"
+mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$start_time_avg"
+mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$end_time_avg"
+mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$tps_avg"
+echo "========== 当前ctyun7 服务/磁盘 ========== "
+ssh ctyun7 "deploy cat"
+ssh ctyun7 "df -h /data"
+echo "========== 当前ctyun9 服务/磁盘 ========== "
+ssh ctyun9 "deploy cat"
+ssh ctyun9 "df -h /data"
 
 }
 
 
 ########################
-# 说明：连接 mysql
+# 说明：清理 command \ error_commad \ process_instance\ task_instance
 ########################
-count_sql(){
+delete_sql(){
+deleteCommand="delete from t_ds_command"
+deleteErrorCommand="delete from t_ds_error_command"
+deleteProcessInstance="delete from t_ds_process_instance"
+deleteTaskInstance="delete from t_ds_task_instance"
 
-count="select count(1) from t_ds_task_instance;"
-
-echo "2022-11-10 20:50 开始运行，目前task总量："
-echo "mysql -h"$mysql_ip" -u"$mysql_user+" -p"$mysql_passwd" -D "$mysql_database" -e "$count
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$count"
-
+mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteCommand"
+mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteErrorCommand"
+mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteProcessInstance"
+mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteTaskInstance"
 
 }
 
@@ -280,13 +351,12 @@ mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$count"
 ########################
 init_mysql(){
 
-sql_path1="$work_path/tools/conf/sql/dolphinscheduler_mysql.sql"
-sql_path2="$work_path/tools/conf/sql/whalescheduler_mysql.sql"
+init_hdfs
+sql_path1=$work_path/tools/conf/sql/dolphinscheduler_mysql.sql
+sql_path2=$work_path/tools/conf/sql/whalescheduler_mysql.sql
 sourceCommand1="source $sql_path1"
 sourceCommand2="source $sql_path2"
 echo "开始source："
-echo $sourceCommand1
-echo $sourceCommand2
 mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$sourceCommand1"
 mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$sourceCommand2"
 echo "结束source："
@@ -358,7 +428,6 @@ sh $work_path/bin/whalescheduler-daemon.sh start api-server
 sh $work_path/bin/whalescheduler-daemon.sh start master-server
 sh $work_path/bin/whalescheduler-daemon.sh start worker-server
 sh $work_path/bin/whalescheduler-daemon.sh start alert-server
-
 
 }
 
@@ -551,6 +620,17 @@ mock_assert(){
         fi
 }
 
+########################
+# 说明：部署后，功能checklist
+########################
+func_check_list(){
+
+        echo "=====1、web访问是否跳转到：中信重定向cas认证？====="
+        echo "=====2、shell 是否正常运行？====="
+        echo "=====3、sync 是否正常同步？====="
+}
+
+
 
 
 tips(){
@@ -581,12 +661,18 @@ main_run(){
 if [ $p_input == "tips" ]
 then
        tips
+elif [ $p_input == "source" ]
+then
+       source_deploy
 elif [ $p_input == "param" ]
 then
       echo_init_param
-elif [ $p_input == "count" ]
+elif [ $p_input == "count_sql" ]
 then
         count_sql
+elif [ $p_input == "delete_sql" ]
+then
+        delete_sql
 elif [ $p_input == "per_run" ]
 then
         performace_run
@@ -594,19 +680,24 @@ elif [ $p_input == "per_col" ]
 then
 		read -p "输入性能结果命名 " commad
         performace_collect $commad
-elif [ $p_input == "remote_exec" ]
+elif [ $p_input == "remote_all_exec_command" ]
 then
 		read -p "多台机器需要执行命令 " commad
-        remote_exec $commad
-elif [ $p_input == "remote_cp" ]
+        remote_all_exec_command $commad
+elif [ $p_input == "remote_all_cp_file" ]
 then
-        remote_cp_delopy_script
-elif [ $p_input == "remote_start" ]
+        read -p "hi, 请输入需要拷贝文件: " file
+        remote_all_cp_file $file
+elif [ $p_input == "remote_all_start" ]
 then
-        remote_start
-elif [ $p_input == "remote_time" ]
+        remote_all_start
+elif [ $p_input == "set_all_GMT8" ]
 then
-        remote_time_GMT8
+        set_all_GMT8
+elif [ $p_input == "set_single_GMT8" ]
+then
+        read -p "hi, 请输入修改时区的ip: " ip
+        set_single_GMT8 $ip
 elif [ $p_input == "conf" ]
 then
         echo "1、初始化配置：conf"
@@ -615,8 +706,9 @@ then
         init_server
 elif [ $p_input == "init_mysql" ]
 then
-        echo "1、初始化：init_mysql"
-        init_mysql
+        #echo "1、初始化：init_mysql"
+        #init_mysql
+        pass
 elif [ $p_input == "restart" ]
 then
         echo "1、停止/启动：服务"
@@ -667,6 +759,7 @@ then
                 today=$p_date
         fi
         echo "当前" $today
+        define_param
         stop_all_server
         run_all_server
 elif [ $p_input == "stop" ]
@@ -676,13 +769,15 @@ elif [ $p_input == "start" ]
 then
     hanld_server start $log_server
 elif [ $p_input == "tar" ]
-then 
+then
     tar_file
 fi
-      
+
 }
- 
+
+
 p_input=$1
 log_server=$2
+today=`date +%m%d`
 define_param
 main_run
