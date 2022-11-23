@@ -4,26 +4,26 @@
 # 说明：定义参数
 ########################
 define_param(){
-# 定义拷贝包的地址
-ctyun5="49.7.112.49"
 
 # 定义主目录
 work_father_path="/data/release/"
 
-# 生产环境
-addr_list=("zx36" "zx37" "zx38" "zx39" "zx40" "zx41" "zx123" "zx124" "zx200" "zx201" "zx202" "zx89" "zx91")
-api_list=("zx36" "zx37")
-alert_list=("zx40" "zx41")
-master_list=("zx40" "zx41")
-worker_list=("zx38" "zx39" "zx123" "zx124" "zx200" "zx201" "zx202" "zx89" "zx91")
+# 定义DB目录
+work_db_path="/data/release/DB/"
 
-# 定义数据库及zk连接
-mysql_ip="zx110"
-zk_ip="zx36:2181,zx37:2181,zx38:2181"
-mysql_user="admin"
-mysql_passwd="scheduler@2022"
+# QA测试环境
+addr_list=("ctyun5")
+api_list=("ctyun5")
+alert_list=("ctyun5")
+master_list=("ctyun5")
+worker_list=("ctyun5")
+
+mysql_ip="ctyun5"
+zk_ip="ctyun5:2181"
+mysql_user="root"
+mysql_passwd="root@123"
 mysql_database="whalescheduler"
-mysql_port="15018"
+mysql_port="3306"
 
 # 工具/工作 目录
 tool_path=$work_father_path"tool/"
@@ -44,6 +44,8 @@ performace_collect_sh=$tool_path"/count_sql.sh"
 p_mysql_jar=$tool_path/mysql-connector-java-8.0.16.jar
 p_ojbc_jar=$tool_path/ojdbc8.jar
 p_common_conf=$tool_path/common.properties
+
+
 p_customer_conf=$tool_path/customer-config.yaml
 
 # packge包名定义
@@ -52,6 +54,10 @@ packge=whalescheduler-1.0-SNAPSHOT-bin
 
 
 }
+
+
+
+
 ########################
 # 说明：deploy环境变量生效
 ########################
@@ -62,15 +68,6 @@ source /etc/profile
 }
 
 
-########################
-# 说明：将 原始包拷贝到服务器工作目录
-# 例：scp ctyun5@/opt/release ./
-########################
-copy_packge_tar(){
-mkdir -p $work_father_path
-scp $ctyun5@/opt/release/$packge_tar ./
-}
-
 
 
 ########################
@@ -80,6 +77,9 @@ performace_run(){
 ssh aws1 "sh $performace_clear_sh"
 ssh aws1 "sh $performace_sh $performace_instance"
 }
+
+
+
 
 ########################
 # 说明：性能压测脚本
@@ -142,8 +142,6 @@ done
 
 
 
-
-
 ########################
 # 说明：启动分布式服务
 # 例：2master+6server
@@ -155,8 +153,9 @@ do
 	echo "开始停止：" $ip
 	echo sh" "$ip" "sh" "$deploy_sh" "allstop
 	ssh $ip sh $deploy_sh allstop
-	remote_single_start $ip
 done
+
+remote_single_start
 
 }
 
@@ -165,26 +164,27 @@ done
 # 例：2master+6server
 ########################
 remote_single_start(){
-ip=$1
-if [[ "${api_list[@]}" =~ "$ip" ]]
-then
-    ssh $ip "sh $deploy_sh start api-server"
-    ssh $ip "sh $deploy_sh start api-server"
-elif [[ "${worker_list[@]}" =~ "$ip" ]]
-then
-    ssh $ip "sh $deploy_sh start worker-server"
-    ssh $ip "sh $deploy_sh start worker-server"
-elif [[ "${master_list[@]}" =~ "$ip" ]]
-then
-    ssh $ip "sh $deploy_sh start master-server"
-    ssh $ip "sh $deploy_sh start master-server"
-elif [[ "${alert_list[@]}" =~ "$ip" ]]
-then
-    ssh $ip "sh $deploy_sh start alert-server"
-    ssh $ip "sh $deploy_sh start alert-server"
-else
-    echo "ip不在地址池内"
-fi
+
+for ip in ${api_list[@]}
+do
+ssh $ip "sh $deploy_sh start api-server"
+done
+
+for ip in ${worker_list[@]}
+do
+ssh $ip "sh $deploy_sh start worker-server"
+done
+
+for ip in ${master_list[@]}
+do
+ssh $ip "sh $deploy_sh start master-server"
+done
+
+for ip in ${alert_list[@]}
+do
+ssh $ip "sh $deploy_sh start alert-server"
+done
+
 }
 
 ########################
@@ -229,58 +229,6 @@ mv $packge $today
 
 }
 
-
-########################
-# 说明：配置替换，jdbc文件，common.property文件
-########################
-conf_server(){
-
-# 定义 lib文件路径
-p_api_lib=$work_path/api-server/libs/
-p_master_lib=$work_path/master-server/libs/
-p_worker_lib=$work_path/worker-server/libs/
-p_alert_lib=$work_path/alert-server/libs/
-p_tools_lib=$work_path/tools/libs/
-p_st_lib=$work_path/standalone-server/libs/
-p_lib_list=("$p_api_lib" "$p_master_lib" "$p_worker_lib" "$p_alert_lib" "$p_tools_lib" "$p_st_lib")
-
-# 定义 conf文件路径
-p_api_conf=$work_path/api-server/conf/
-p_master_conf=$work_path/master-server/conf/
-p_worker_conf=$work_path/worker-server/conf/
-p_alert_conf=$work_path/alert-server/conf/
-p_tools_conf=$work_path/tools/conf/
-p_st_conf=$work_path/standalone-server/conf/
-p_conf_list=("$p_api_conf" "$p_master_conf" "$p_worker_conf" "$p_alert_conf" "$p_tools_conf" "$p_st_conf")
-
-
-
-echo "========== mysql/ojbc 配置替换：开始 ========== "
-for p_lib in ${p_lib_list[@]}
-do
-        echo "cp $p_mysql_jar $p_lib"
-        echo "cp $p_ojbc_jar $p_lib"
-        cp $p_mysql_jar $p_lib
-        cp $p_ojbc_jar $p_lib
-done
-echo "========== mysql/ojbc 配置替换：结束 ========== "
-
-
-echo "========== p_common_conf 配置替换：开始 ========== "
-for p_conf in ${p_conf_list[@]}
-do
-        echo "cp $p_common_conf $p_conf"
-        cp $p_common_conf $p_conf
-done
-echo "========== p_common_conf 配置替换：结束 ========== "
-
-
-echo "========== p_customer_conf 配置替换：开始 ========== "
-        echo "cp $p_customer_conf $p_api_conf"
-        cp $p_customer_conf $p_api_conf
-echo "========== p_customer_conf 配置替换：结束 ========== "
-
-}
 
 
 ########################
@@ -575,6 +523,16 @@ mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -P$mysql_port -D$mysql_database
 
 }
 
+########################
+# 说明：将 备份数据库
+# 例：mysqldump
+########################
+mysql_dump(){
+
+echo "mysql -h" $mysql_ip "-u" $mysql_user " -P" $mysql_port " -p " $mysql_database
+mysqldump -h$mysql_ip -u$mysql_user -P$mysql_port -p $mysql_database > work_db_path/$mysql_database.sql
+
+}
 
 
 ########################
@@ -701,14 +659,12 @@ then
 elif [ $p_input == "conf" ]
 then
         echo "1、初始化配置：conf"
+        stop_all_server
         tar_file
-        conf_server
         init_server
 elif [ $p_input == "init_mysql" ]
 then
-        #echo "1、初始化：init_mysql"
-        #init_mysql
-        pass
+        echo "禁止初始化mysql"
 elif [ $p_input == "restart" ]
 then
         echo "1、停止/启动：服务"

@@ -4,26 +4,27 @@
 # 说明：定义参数
 ########################
 define_param(){
-# 定义拷贝包的地址
-ctyun5="49.7.112.49"
 
 # 定义主目录
 work_father_path="/data/release/"
 
-# 测试环境
-addr_list=("ctyun7" "ctyun9")
-api_list=("ctyun7" "ctyun9")
-alert_list=("ctyun7" "ctyun9")
-master_list=("ctyun7" "ctyun9")
-worker_list=("ctyun7" "ctyun9")
+# 定义DB目录
+work_db_path="/data/release/DB/"
 
-# 定义数据库及zk连接
-mysql_ip="ctyun7"
-zk_ip="ctyun7:2181"
+# 测试环境
+addr_list=("ctyun5" )
+api_list=("ctyun5" )
+alert_list=("ctyun5" )
+master_list=("ctyun5" )
+worker_list=("ctyun5" )
+
+mysql_ip="ctyun5"
+zk_ip="ctyun5:2181"
 mysql_user="root"
 mysql_passwd="root@123"
 mysql_database="whalescheduler"
 mysql_port="3306"
+
 
 # 工具/工作 目录
 tool_path=$work_father_path"tool/"
@@ -46,12 +47,33 @@ p_ojbc_jar=$tool_path/ojdbc8.jar
 p_common_conf=$tool_path/common.properties
 p_customer_conf=$tool_path/customer-config.yaml
 
+
 # packge包名定义
 packge_tar=whalescheduler-1.0-SNAPSHOT-bin.tar.gz
 packge=whalescheduler-1.0-SNAPSHOT-bin
 
 
+
 }
+
+########################
+# 说明：获取当前目录下最新日期
+########################
+get_current_day(){
+    day=$1
+    if [ $day == "today" ]
+    then
+        today=`date +%m%d`
+        echo "今日："$today
+    elif [ $day == "recent_day" ]
+    then
+        today=`ls -Art |grep ^[0-9].*[0-9]$ | tail -n 1`
+        echo "最新："$today
+    else
+        echo "非法日期"
+    fi
+}
+
 ########################
 # 说明：deploy环境变量生效
 ########################
@@ -62,15 +84,6 @@ source /etc/profile
 }
 
 
-########################
-# 说明：将 原始包拷贝到服务器工作目录
-# 例：scp ctyun5@/opt/release ./
-########################
-copy_packge_tar(){
-mkdir -p $work_father_path
-scp $ctyun5@/opt/release/$packge_tar ./
-}
-
 
 
 ########################
@@ -80,6 +93,9 @@ performace_run(){
 ssh aws1 "sh $performace_clear_sh"
 ssh aws1 "sh $performace_sh $performace_instance"
 }
+
+
+
 
 ########################
 # 说明：性能压测脚本
@@ -142,8 +158,6 @@ done
 
 
 
-
-
 ########################
 # 说明：启动分布式服务
 # 例：2master+6server
@@ -155,8 +169,9 @@ do
 	echo "开始停止：" $ip
 	echo sh" "$ip" "sh" "$deploy_sh" "allstop
 	ssh $ip sh $deploy_sh allstop
-	remote_single_start $ip
 done
+
+remote_single_start
 
 }
 
@@ -165,26 +180,27 @@ done
 # 例：2master+6server
 ########################
 remote_single_start(){
-ip=$1
-if [[ "${api_list[@]}" =~ "$ip" ]]
-then
-    ssh $ip "sh $deploy_sh start api-server"
-    ssh $ip "sh $deploy_sh start api-server"
-elif [[ "${worker_list[@]}" =~ "$ip" ]]
-then
-    ssh $ip "sh $deploy_sh start worker-server"
-    ssh $ip "sh $deploy_sh start worker-server"
-elif [[ "${master_list[@]}" =~ "$ip" ]]
-then
-    ssh $ip "sh $deploy_sh start master-server"
-    ssh $ip "sh $deploy_sh start master-server"
-elif [[ "${alert_list[@]}" =~ "$ip" ]]
-then
-    ssh $ip "sh $deploy_sh start alert-server"
-    ssh $ip "sh $deploy_sh start alert-server"
-else
-    echo "ip不在地址池内"
-fi
+
+for ip in ${api_list[@]}
+do
+ssh $ip "sh $deploy_sh start api-server"
+done
+
+for ip in ${worker_list[@]}
+do
+ssh $ip "sh $deploy_sh start worker-server"
+done
+
+for ip in ${master_list[@]}
+do
+ssh $ip "sh $deploy_sh start master-server"
+done
+
+for ip in ${alert_list[@]}
+do
+ssh $ip "sh $deploy_sh start alert-server"
+done
+
 }
 
 ########################
@@ -230,67 +246,12 @@ mv $packge $today
 }
 
 
-########################
-# 说明：配置替换，jdbc文件，common.property文件
-########################
-conf_server(){
-
-# 定义 lib文件路径
-p_api_lib=$work_path/api-server/libs/
-p_master_lib=$work_path/master-server/libs/
-p_worker_lib=$work_path/worker-server/libs/
-p_alert_lib=$work_path/alert-server/libs/
-p_tools_lib=$work_path/tools/libs/
-p_st_lib=$work_path/standalone-server/libs/
-p_lib_list=("$p_api_lib" "$p_master_lib" "$p_worker_lib" "$p_alert_lib" "$p_tools_lib" "$p_st_lib")
-
-# 定义 conf文件路径
-p_api_conf=$work_path/api-server/conf/
-p_master_conf=$work_path/master-server/conf/
-p_worker_conf=$work_path/worker-server/conf/
-p_alert_conf=$work_path/alert-server/conf/
-p_tools_conf=$work_path/tools/conf/
-p_st_conf=$work_path/standalone-server/conf/
-p_conf_list=("$p_api_conf" "$p_master_conf" "$p_worker_conf" "$p_alert_conf" "$p_tools_conf" "$p_st_conf")
-
-
-
-echo "========== mysql/ojbc 配置替换：开始 ========== "
-for p_lib in ${p_lib_list[@]}
-do
-        echo "cp $p_mysql_jar $p_lib"
-        echo "cp $p_ojbc_jar $p_lib"
-        cp $p_mysql_jar $p_lib
-        cp $p_ojbc_jar $p_lib
-done
-echo "========== mysql/ojbc 配置替换：结束 ========== "
-
-
-echo "========== p_common_conf 配置替换：开始 ========== "
-for p_conf in ${p_conf_list[@]}
-do
-        echo "cp $p_common_conf $p_conf"
-        cp $p_common_conf $p_conf
-done
-echo "========== p_common_conf 配置替换：结束 ========== "
-
-
-echo "========== p_customer_conf 配置替换：开始 ========== "
-        echo "cp $p_customer_conf $p_api_conf"
-        cp $p_customer_conf $p_api_conf
-echo "========== p_customer_conf 配置替换：结束 ========== "
-
-}
-
 
 ########################
 # 说明：数据库配置
 ########################
 init_server(){
 
-# sync同步关闭
-cd $work_path/api-server/conf
-sed  -i 's/enabled: true/enabled: false/g' customer-config.yaml
 
 # 修改配置
 cd $work_path/bin/env/
@@ -314,7 +275,7 @@ start_time_avg="select start_time as start_time_avg, count(1) from t_ds_task_ins
 end_time_avg="select end_time as end_time_avg,count(1) from t_ds_task_instance group by end_time order by count(1) desc limit 3;"
 tps_avg="select avg(a) as tps_avg from (select count(1) as a,start_time from t_ds_task_instance group by start_time order by count(1)) as tmp;"
 
-echo "========== 2022-11-17 20:40 开始运行，目前task总量：========== "
+echo "========== 2022-11-17 18:17 开始运行，目前task总量：========== "
 echo "mysql -h"$mysql_ip" -u"$mysql_user+" -p"$mysql_passwd" -D "$mysql_database" -e "$count
 mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$count"
 mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$start_time_avg"
@@ -575,6 +536,16 @@ mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -P$mysql_port -D$mysql_database
 
 }
 
+########################
+# 说明：将 备份数据库
+# 例：mysqldump
+########################
+mysql_dump(){
+
+echo "mysql -h" $mysql_ip "-u" $mysql_user " -P" $mysql_port " -p " $mysql_database
+mysqldump -h$mysql_ip -u$mysql_user -P$mysql_port -p $mysql_database > work_db_path/$mysql_database.sql
+
+}
 
 
 ########################
@@ -691,24 +662,16 @@ then
 elif [ $p_input == "remote_all_start" ]
 then
         remote_all_start
-elif [ $p_input == "set_all_GMT8" ]
-then
-        set_all_GMT8
-elif [ $p_input == "set_single_GMT8" ]
-then
-        read -p "hi, 请输入修改时区的ip: " ip
-        set_single_GMT8 $ip
 elif [ $p_input == "conf" ]
 then
         echo "1、初始化配置：conf"
+        get_current_day "today"
+        define_param
         tar_file
-        conf_server
         init_server
 elif [ $p_input == "init_mysql" ]
 then
-        #echo "1、初始化：init_mysql"
-        #init_mysql
-        pass
+        echo "禁止初始化mysql"
 elif [ $p_input == "restart" ]
 then
         echo "1、停止/启动：服务"
@@ -726,18 +689,6 @@ elif [ $p_input == "mysql" ]
 then
         echo "1、链接服务：mysql"
         con_mysql
-elif [ $p_input == "mock_base" ]
-then
-        echo "1、mock 基础服务"
-        mock_base
-elif [ $p_input == "mock_user" ]
-then
-        echo "1、mock 业务服务"
-        mock_user
-elif [ $p_input == "mock_assert" ]
-then
-        echo "1、mock_assert 结果"
-        mock_assert
 elif [ $p_input == "check" ]
 then
         echo "1、check 服务：api"
@@ -751,26 +702,13 @@ then
 elif [ $p_input == "allstop" ]
 then
         stop_all_server
-elif [ $p_input == "restart_day" ]
-then
-        read -p "hi, 请输入启动哪天: today/0613/0614 " p_date
-        if [ $p_date != "today" ]
-        then
-                today=$p_date
-        fi
-        echo "当前" $today
-        define_param
-        stop_all_server
-        run_all_server
 elif [ $p_input == "stop" ]
 then
     hanld_server stop $log_server
 elif [ $p_input == "start" ]
 then
+
     hanld_server start $log_server
-elif [ $p_input == "tar" ]
-then
-    tar_file
 fi
 
 }
@@ -778,6 +716,6 @@ fi
 
 p_input=$1
 log_server=$2
-today=`date +%m%d`
+get_current_day "recent_day"
 define_param
 main_run

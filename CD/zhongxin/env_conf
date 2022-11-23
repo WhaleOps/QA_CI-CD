@@ -1,11 +1,26 @@
 # 测试环境
+addr_list=("ctyun5" )
+api_list=("ctyun5" )
+alert_list=("ctyun5" )
+master_list=("ctyun5" )
+worker_list=("ctyun5" )
+
+mysql_ip="ctyun5"
+zk_ip="ctyun5:2181"
+mysql_user="root"
+mysql_passwd="root@123"
+mysql_database="whalescheduler"
+mysql_port="3306"
+
+
+
+# 测试环境
 addr_list=("ctyun7" "ctyun9")
 api_list=("ctyun7" "ctyun9")
 alert_list=("ctyun7" "ctyun9")
 master_list=("ctyun7" "ctyun9")
 worker_list=("ctyun7" "ctyun9")
 
-# 定义数据库及zk连接
 mysql_ip="ctyun7"
 zk_ip="ctyun7:2181"
 mysql_user="root"
@@ -13,17 +28,31 @@ mysql_passwd="root@123"
 mysql_database="whalescheduler"
 mysql_port="3306"
 
-# 生产环境
+# 中信生产环境
 addr_list=("zx36" "zx37" "zx38" "zx39" "zx40" "zx41" "zx123" "zx124" "zx200" "zx201" "zx202" "zx89" "zx91")
 api_list=("zx36" "zx37")
 alert_list=("zx40" "zx41")
 master_list=("zx40" "zx41")
 worker_list=("zx38" "zx39" "zx123" "zx124" "zx200" "zx201" "zx202" "zx89" "zx91")
 
-# 定义数据库及zk连接
 mysql_ip="zx110"
 zk_ip="zx36:2181,zx37:2181,zx38:2181"
 mysql_user="admin"
 mysql_passwd="scheduler@2022"
 mysql_database="whalescheduler"
 mysql_port="15018"
+
+
+# 中信测试环境
+addr_list=("zx32" "zx33" "zx3" "zx196" "zx166" "223")
+api_list=("zx32" "zx33")
+alert_list=("zx32" "zx33")
+master_list=("zx32" "zx33")
+worker_list=("zx32" "zx33" "zx3" "zx196" "zx166" "223")
+
+mysql_ip="zx_sql"
+zk_ip="zx32:2181"
+mysql_user="admin"
+mysql_passwd="123qqq...A"
+mysql_database="300beta"
+mysql_port="15052"
