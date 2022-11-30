@@ -5,30 +5,33 @@
 ########################
 define_param(){
 
+
 # 定义主目录
 work_father_path="/data/release/"
 
 # 定义DB目录
 work_db_path="/data/release/DB/"
 
-# 生产环境
+# 获取当前日期
+get_current_day $1
+
+# 工具/工作 目录
+tool_path=$work_father_path"tool/"
+work_path=$work_father_path$current_day
+
+# 中信生产环境
 addr_list=("zx36" "zx37" "zx38" "zx39" "zx40" "zx41" "zx123" "zx124" "zx200" "zx201" "zx202" "zx89" "zx91")
 api_list=("zx36" "zx37")
 alert_list=("zx40" "zx41")
 master_list=("zx40" "zx41")
 worker_list=("zx38" "zx39" "zx123" "zx124" "zx200" "zx201" "zx202" "zx89" "zx91")
 
-# 定义数据库及zk连接
 mysql_ip="zx110"
 zk_ip="zx36:2181,zx37:2181,zx38:2181"
 mysql_user="admin"
 mysql_passwd="scheduler@2022"
 mysql_database="whalescheduler"
 mysql_port="15018"
-
-# 工具/工作 目录
-tool_path=$work_father_path"tool/"
-work_path=$work_father_path$today
 
 
 # 定义运维脚本
@@ -40,12 +43,6 @@ performace_clear_sh=$tool_path"/clear_history_process_instance.sh"
 performace_instance="7491908079552 2 10 600"
 performace_collect_sh=$tool_path"/count_sql.sh"
 
-
-# 待替换文件
-p_mysql_jar=$tool_path/mysql-connector-java-8.0.16.jar
-p_ojbc_jar=$tool_path/ojdbc8.jar
-p_common_conf=$tool_path/common.properties
-p_customer_conf=$tool_path/customer-config.yaml
 
 
 # packge包名定义
@@ -61,14 +58,15 @@ packge=whalescheduler-1.0-SNAPSHOT-bin
 ########################
 get_current_day(){
     day=$1
+    cd $work_father_path
     if [ $day == "today" ]
     then
-        today=`date +%m%d`
-        echo "今日："$today
+        current_day=`date +%m%d`
+        echo "获取今日current_day："$current_day
     elif [ $day == "recent_day" ]
     then
-        today=`ls -Art |grep ^[0-9].*[0-9]$ | tail -n 1`
-        echo "最新："$today
+        current_day=`ls -Art |grep ^[0-9].*[0-9]$ | tail -n 1`
+        echo "获取最新current_day："$current_day
     else
         echo "非法日期"
     fi
@@ -111,7 +109,7 @@ ssh aws1 "sh $performace_collect_sh $commad"
 echo_init_param(){
 echo "全部参数"
 echo "tool目录："$tool_path
-echo "today目录："$today
+echo "current_day目录："$current_day
 echo "work_path目录："$work_path
 echo "p_mysql_jar目录："$p_mysql_jar
 echo "p_ojbc_jar目录："$p_ojbc_jar
@@ -239,9 +237,9 @@ tar_file(){
 
 pwd
 cd $work_father_path
-rm -rf $today
+rm -rf $current_day
 tar -zxf $packge_tar
-mv $packge $today
+mv $packge $current_day
 
 }
 
@@ -665,8 +663,7 @@ then
 elif [ $p_input == "conf" ]
 then
         echo "1、初始化配置：conf"
-        get_current_day "today"
-        define_param
+        define_param "today"
         tar_file
         init_server
 elif [ $p_input == "init_mysql" ]
@@ -674,30 +671,22 @@ then
         echo "禁止初始化mysql"
 elif [ $p_input == "restart" ]
 then
-        echo "1、停止/启动：服务"
         stop_all_server
         run_all_server
 elif [ $p_input == "log" ]
 then
-        echo "1、查看日志：log"
         cat_log
 elif [ $p_input == "cat" ]
 then
-        echo "1、查看服务：server"
         cat_server
 elif [ $p_input == "mysql" ]
 then
-        echo "1、链接服务：mysql"
         con_mysql
 elif [ $p_input == "check" ]
 then
-        echo "1、check 服务：api"
         check_api_server
-        echo "2、check 服务：worker"
         check_worker_server
-        echo "3、check 服务：master"
         check_master_server
-        echo "4、check 服务：worker"
         check_alert_server
 elif [ $p_input == "allstop" ]
 then
@@ -707,7 +696,6 @@ then
     hanld_server stop $log_server
 elif [ $p_input == "start" ]
 then
-
     hanld_server start $log_server
 fi
 
@@ -716,6 +704,5 @@ fi
 
 p_input=$1
 log_server=$2
-get_current_day "recent_day"
-define_param
+define_param "recent_day"
 main_run

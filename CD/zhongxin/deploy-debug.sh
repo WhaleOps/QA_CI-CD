@@ -19,19 +19,15 @@ get_current_day $1
 tool_path=$work_father_path"tool/"
 work_path=$work_father_path$current_day
 
-# QA环境
-addr_list=("ctyun5" )
-api_list=("ctyun5" )
-alert_list=("ctyun5" )
-master_list=("ctyun5" )
-worker_list=("ctyun5" )
+# 中信测试环境
+addr_list=("zx34")
 
-mysql_ip="ctyun5"
-zk_ip="ctyun5:2181"
-mysql_user="root"
-mysql_passwd="root@123"
-mysql_database="whalescheduler"
-mysql_port="3306"
+mysql_ip="zx_sql"
+zk_ip="zx34:2181"
+mysql_user="admin"
+mysql_passwd="123qqq...A"
+mysql_database="300beta_debug"
+mysql_port="15052"
 
 
 # 定义运维脚本
@@ -250,10 +246,6 @@ mv $packge $current_day
 ########################
 init_server(){
 
-
-# 修改master-server 内存
-cd $work_path/master-server/bin/
-sed -i 's/Xmn2g/Xmn1g/g' start.sh
 
 # 修改配置
 cd $work_path/bin/env/
