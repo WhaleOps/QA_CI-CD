@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 if [ $# -eq 0 ];
 then
   echo "./batch_insert_command.sh process_definition_code=1 process_definition_version=2 batch_size=10 batch_number=10"
@@ -35,6 +36,5 @@ for i in $(seq 1 $batch_number)
 do
 echo $i
 mysql -hds-test-mysql.cwkplpl0hwlq.ap-southeast-1.rds.amazonaws.com -uadmin -padminadmin -D "sprint_2209" -e "$insertCommand"
-#mycli -hlocalhost -P3308 -uroot -p123456 -e "$insertCommand"
 sleep 1s
 done
