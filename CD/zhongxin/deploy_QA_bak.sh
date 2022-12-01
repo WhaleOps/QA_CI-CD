@@ -19,25 +19,23 @@ get_current_day $1
 tool_path=$work_father_path"tool/"
 work_path=$work_father_path$current_day
 
-# 中信测试环境
-addr_list=("zx34")
+# QA环境
+addr_list=("ctyun5")
+api_list=("ctyun5")
+alert_list=("ctyun5")
+master_list=("ctyun5")
+worker_list=("ctyun5")
 
-mysql_ip="zx_sql"
-zk_ip="zx34:2181"
-mysql_user="admin"
-mysql_passwd="123qqq...A"
-mysql_database="300beta_debug"
-mysql_port="15052"
+mysql_ip="ctyun5"
+zk_ip="ctyun5:2181"
+mysql_user="root"
+mysql_passwd="root@123"
+mysql_database="whalescheduler"
+mysql_port="3306"
 
 
 # 定义运维脚本
 deploy_sh=$tool_path"deploy.sh"
-
-# 定义压力脚本
-performace_sh=$tool_path"/batch_insert_command.sh"
-performace_clear_sh=$tool_path"/clear_history_process_instance.sh"
-performace_instance="7491908079552 2 10 600"
-performace_collect_sh=$tool_path"/count_sql.sh"
 
 
 
@@ -75,17 +73,6 @@ source_deploy(){
 echo "========== source 环境变量 ========== "
 sed -i '$a\alias deploy="/data/release/tool/deploy.sh"' /etc/profile
 source /etc/profile
-}
-
-
-
-
-########################
-# 说明：性能压测脚本
-########################
-performace_run(){
-ssh aws1 "sh $performace_clear_sh"
-ssh aws1 "sh $performace_sh $performace_instance"
 }
 
 
@@ -245,6 +232,20 @@ mv $packge $current_day
 # 说明：数据库配置
 ########################
 init_server(){
+
+
+# 修改master-server 内存
+cd $work_path/master-server/bin/
+sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+cd $work_path/worker-server/bin/
+sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+cd $work_path/api-server/bin/
+sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+cd $work_path/alert-server/bin/
+sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
 
 
 # 修改配置
@@ -415,7 +416,7 @@ check_api_server(){
 check_worker_server(){
 
     # 查看worker log
-    worker=`ps -ef|grep worker-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-worker.log/g'`
+    worker=`ps -ef|grep worker-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-worker.log/g'`
     echo "开始监控 worker"
     echo "tail -f "$worker
     tmp=$(tail -n1 $worker)
@@ -438,7 +439,7 @@ check_worker_server(){
 check_master_server(){
 
     # 查看master log
-    master=`ps -ef|grep master-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-master.log/g'`
+    master=`ps -ef|grep master-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-master.log/g'`
     echo "开始监控 master"
     echo "tail -f "$master
     tmp=$(tail -n1 $master)
@@ -461,7 +462,7 @@ check_master_server(){
 check_alert_server(){
 
     # 查看alert log
-    alert=`ps -ef|grep alert-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-alert.log/g'`
+    alert=`ps -ef|grep alert-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-alert.log/g'`
     echo "开始监控 alert"
     echo "tail -f "$alert
     tmp=$(tail -n1 $alert)
@@ -638,9 +639,6 @@ then
 elif [ $p_input == "delete_sql" ]
 then
         delete_sql
-elif [ $p_input == "per_run" ]
-then
-        performace_run
 elif [ $p_input == "per_col" ]
 then
 		read -p "输入性能结果命名 " commad

@@ -1,0 +1,13 @@
+# 中信测试环境
+addr_list=("zx32" "zx33" "zx3" "zx196" "zx166" "223")
+api_list=("zx32" "zx33")
+alert_list=("zx32" "zx33")
+master_list=("zx32" "zx33")
+worker_list=("zx32" "zx33" "zx3" "zx196" "zx166" "223")
+
+mysql_ip="zx_sql"
+zk_ip="zx32:2181"
+mysql_user="admin"
+mysql_passwd="123qqq...A"
+mysql_database="300beta"
+mysql_port="15052"

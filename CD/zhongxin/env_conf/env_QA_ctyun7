@@ -1,0 +1,13 @@
+# 测试环境
+addr_list=("ctyun7" "ctyun9")
+api_list=("ctyun7" "ctyun9")
+alert_list=("ctyun7" "ctyun9")
+master_list=("ctyun7" "ctyun9")
+worker_list=("ctyun7" "ctyun9")
+
+mysql_ip="ctyun7"
+zk_ip="ctyun7:2181"
+mysql_user="root"
+mysql_passwd="root@123"
+mysql_database="whalescheduler"
+mysql_port="3306"

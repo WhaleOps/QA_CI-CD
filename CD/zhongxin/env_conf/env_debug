@@ -1,0 +1,10 @@
+# 中信测试环境
+addr_list=("zx34")
+
+mysql_ip="zx_sql"
+zk_ip="zx34:2181"
+mysql_user="admin"
+mysql_passwd="123qqq...A"
+mysql_database="300beta_debug"
+mysql_port="15052"
+
