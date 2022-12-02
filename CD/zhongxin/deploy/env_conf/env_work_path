@@ -1,0 +1,6 @@
+# 定义主目录
+work_father_path="/data/release/"
+
+# 定义DB目录
+work_db_path="/data/release/DB/"
+

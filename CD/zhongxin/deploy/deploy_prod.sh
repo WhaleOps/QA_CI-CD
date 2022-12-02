@@ -1,18 +1,23 @@
 #!/bin/bash
 
-
-
 ########################
-# 说明：环境信息
+# 说明：读取环境信息
 ########################
 define_env_conf(){
 
 # 定义读取环境
-file=./env_conf/env_staging
+env_file=/data/release/tool/env_conf/env_prod
+
+# 定义读取环境
+env_work_path=/data/release/tool/env_conf/env_work_path
 
 while read line;do
     eval "$line"
-done < $file
+done < $env_file
+
+while read line;do
+    eval "$line"
+done < $env_work_path
 
 }
 
@@ -27,28 +32,20 @@ define_env_conf
 # 定义日志路径
 define_log_path
 
-# 定义主目录
-work_father_path="/data/release/"
-
-# 定义DB目录
-work_db_path="/data/release/DB/"
-
-# 获取当前日期
+# 定义日期
 get_current_day $1
 
-# 工具/工作 目录
+# 定义工作目录
 tool_path=$work_father_path"tool/"
 work_path=$work_father_path$current_day
 
-
 # 定义运维脚本
-deploy_sh=$tool_path"deploy.sh"
+deploy_sh="$0"
 
-
-
-# packge包名定义
+# 定义packge包名
 packge_tar=whalescheduler-1.0-SNAPSHOT-bin.tar.gz
 packge=whalescheduler-1.0-SNAPSHOT-bin
+
 
 }
 
@@ -72,6 +69,7 @@ alert_log_path=`ps -ef|grep alert-server|tail -2 | grep -v grep | awk '{print $1
 ########################
 get_current_day(){
     day=$1
+    echo $day
     cd $work_father_path
     if [ $day == "today" ]
     then
@@ -99,24 +97,15 @@ source /etc/profile
 
 
 ########################
-# 说明：性能压测脚本
-########################
-performace_collect(){
-ssh aws1 "sh $performace_collect_sh $commad"
-}
-
-
-########################
 # 说明：打印启动参数
 ########################
 echo_init_param(){
 echo "全部参数"
+echo "当前部署文件是："$0
+echo "deploy_sh脚本目录："$deploy_sh
 echo "tool目录："$tool_path
 echo "current_day目录："$current_day
 echo "work_path目录："$work_path
-echo "p_mysql_jar目录："$p_mysql_jar
-echo "p_ojbc_jar目录："$p_ojbc_jar
-echo "p_customer_conf目录:  "$p_customer_conf
 echo "mysql_ip地址："$mysql_ip
 echo "zk_ip地址："$zk_ip
 echo "mysql_user："$mysql_user
@@ -253,6 +242,28 @@ mv $packge $current_day
 ########################
 init_server(){
 
+file_name=$0
+
+if [ $file_name == "/data/release/tool/deploy_QA.sh" ]
+    then
+        # 修改master-server 内存
+        echo "QA 环境，需修改环境"
+        cd $work_path/master-server/bin/
+        sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+        cd $work_path/worker-server/bin/
+        sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+        cd $work_path/api-server/bin/
+        sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+        cd $work_path/alert-server/bin/
+        sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+    else
+        echo "非QA 环境，不需要修改start.sh 配置"
+    fi
+
+
 
 # 修改配置
 cd $work_path/bin/env/
@@ -291,22 +302,6 @@ ssh ctyun9 "df -h /data"
 
 }
 
-
-########################
-# 说明：清理 command \ error_commad \ process_instance\ task_instance
-########################
-delete_sql(){
-deleteCommand="delete from t_ds_command"
-deleteErrorCommand="delete from t_ds_error_command"
-deleteProcessInstance="delete from t_ds_process_instance"
-deleteTaskInstance="delete from t_ds_task_instance"
-
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteCommand"
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteErrorCommand"
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteProcessInstance"
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteTaskInstance"
-
-}
 
 ########################
 # 说明：初始化 mysql
@@ -400,7 +395,7 @@ sh $work_path/bin/whalescheduler-daemon.sh start alert-server
 check_api_server(){
 
     # 查看api log
-    api=`ps -ef|grep api-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-api.log/g'`
+    api=$api_log_path
     echo "开始监控 api"
     echo "tail -f "$api
     tmp=$(tail -n1 $api)
@@ -508,7 +503,6 @@ then
     echo "tail -f "$master
     tail -f $master
 elif  [ $log_server == "worker" ]
-
 then
     echo "开始监控worker"
     worker=$worker_log_path
@@ -642,13 +636,6 @@ then
 elif [ $p_input == "count_sql" ]
 then
         count_sql
-elif [ $p_input == "delete_sql" ]
-then
-        delete_sql
-elif [ $p_input == "per_col" ]
-then
-		read -p "输入性能结果命名 " commad
-        performace_collect $commad
 elif [ $p_input == "remote_all_exec_command" ]
 then
 		read -p "多台机器需要执行命令 " commad
@@ -664,6 +651,7 @@ elif [ $p_input == "conf" ]
 then
         echo "1、初始化配置：conf"
         define_param "today"
+        stop_all_server
         tar_file
         init_server
 elif [ $p_input == "init_mysql" ]
@@ -700,7 +688,6 @@ then
 fi
 
 }
-
 
 p_input=$1
 log_server=$2

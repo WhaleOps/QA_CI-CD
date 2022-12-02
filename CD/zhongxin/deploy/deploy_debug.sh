@@ -1,62 +1,88 @@
 #!/bin/bash
 
 ########################
+# 说明：读取环境信息
+########################
+define_env_conf(){
+
+# 定义读取环境
+env_file=/data/release/tool/env_conf/env_debug
+
+# 定义读取环境
+env_work_path=/data/release/tool/env_conf/env_work_path
+
+while read line;do
+    eval "$line"
+done < $env_file
+
+while read line;do
+    eval "$line"
+done < $env_work_path
+
+}
+
+########################
 # 说明：定义参数
 ########################
 define_param(){
 
-# 定义主目录
-work_father_path="/data/release/"
+# 读取环境信息
+define_env_conf
 
-# 定义DB目录
-work_db_path="/data/release/DB/"
+# 定义日志路径
+define_log_path
 
-# QA测试环境
-addr_list=("ctyun5")
-api_list=("ctyun5")
-alert_list=("ctyun5")
-master_list=("ctyun5")
-worker_list=("ctyun5")
+# 定义日期
+get_current_day $1
 
-mysql_ip="ctyun5"
-zk_ip="ctyun5:2181"
-mysql_user="root"
-mysql_passwd="root@123"
-mysql_database="whalescheduler"
-mysql_port="3306"
-
-# 工具/工作 目录
+# 定义工作目录
 tool_path=$work_father_path"tool/"
-work_path=$work_father_path$today
-
+work_path=$work_father_path$current_day
 
 # 定义运维脚本
-deploy_sh=$tool_path"deploy.sh"
+deploy_sh="$0"
 
-# 定义压力脚本
-performace_sh=$tool_path"/batch_insert_command.sh"
-performace_clear_sh=$tool_path"/clear_history_process_instance.sh"
-performace_instance="7491908079552 2 10 600"
-performace_collect_sh=$tool_path"/count_sql.sh"
-
-
-# 待替换文件
-p_mysql_jar=$tool_path/mysql-connector-java-8.0.16.jar
-p_ojbc_jar=$tool_path/ojdbc8.jar
-p_common_conf=$tool_path/common.properties
-
-
-p_customer_conf=$tool_path/customer-config.yaml
-
-# packge包名定义
+# 定义packge包名
 packge_tar=whalescheduler-1.0-SNAPSHOT-bin.tar.gz
 packge=whalescheduler-1.0-SNAPSHOT-bin
 
 
 }
 
+########################
+# 说明：进程日志路径
+########################
+define_log_path(){
+api_log_path=`ps -ef|grep api-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-api.log/g'`
+
+master_log_path=`ps -ef|grep master-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-master.log/g'`
+
+worker_log_path=`ps -ef|grep worker-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-worker.log/g'`
+
+alert_log_path=`ps -ef|grep alert-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-alert.log/g'`
+
+}
 
 
+########################
+# 说明：获取当前目录下最新日期
+########################
+get_current_day(){
+    day=$1
+    echo $day
+    cd $work_father_path
+    if [ $day == "today" ]
+    then
+        current_day=`date +%m%d`
+        echo "获取今日current_day："$current_day
+    elif [ $day == "recent_day" ]
+    then
+        current_day=`ls -Art |grep ^[0-9].*[0-9]$ | tail -n 1`
+        echo "获取最新current_day："$current_day
+    else
+        echo "非法日期"
+    fi
+}
 
 ########################
 # 说明：deploy环境变量生效
@@ -71,35 +97,15 @@ source /etc/profile
 
 
 ########################
-# 说明：性能压测脚本
-########################
-performace_run(){
-ssh aws1 "sh $performace_clear_sh"
-ssh aws1 "sh $performace_sh $performace_instance"
-}
-
-
-
-
-########################
-# 说明：性能压测脚本
-########################
-performace_collect(){
-ssh aws1 "sh $performace_collect_sh $commad"
-}
-
-
-########################
 # 说明：打印启动参数
 ########################
 echo_init_param(){
 echo "全部参数"
+echo "当前部署文件是："$0
+echo "deploy_sh脚本目录："$deploy_sh
 echo "tool目录："$tool_path
-echo "today目录："$today
+echo "current_day目录："$current_day
 echo "work_path目录："$work_path
-echo "p_mysql_jar目录："$p_mysql_jar
-echo "p_ojbc_jar目录："$p_ojbc_jar
-echo "p_customer_conf目录:  "$p_customer_conf
 echo "mysql_ip地址："$mysql_ip
 echo "zk_ip地址："$zk_ip
 echo "mysql_user："$mysql_user
@@ -223,9 +229,9 @@ tar_file(){
 
 pwd
 cd $work_father_path
-rm -rf $today
+rm -rf $current_day
 tar -zxf $packge_tar
-mv $packge $today
+mv $packge $current_day
 
 }
 
@@ -236,9 +242,28 @@ mv $packge $today
 ########################
 init_server(){
 
-# sync同步关闭
-cd $work_path/api-server/conf
-sed  -i 's/enabled: true/enabled: false/g' customer-config.yaml
+file_name=$0
+
+if [ $file_name == "/data/release/tool/deploy_QA.sh" ]
+    then
+        # 修改master-server 内存
+        echo "QA 环境，需修改环境"
+        cd $work_path/master-server/bin/
+        sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+        cd $work_path/worker-server/bin/
+        sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+        cd $work_path/api-server/bin/
+        sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+
+        cd $work_path/alert-server/bin/
+        sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+    else
+        echo "非QA 环境，不需要修改start.sh 配置"
+    fi
+
+
 
 # 修改配置
 cd $work_path/bin/env/
@@ -277,22 +302,6 @@ ssh ctyun9 "df -h /data"
 
 }
 
-
-########################
-# 说明：清理 command \ error_commad \ process_instance\ task_instance
-########################
-delete_sql(){
-deleteCommand="delete from t_ds_command"
-deleteErrorCommand="delete from t_ds_error_command"
-deleteProcessInstance="delete from t_ds_process_instance"
-deleteTaskInstance="delete from t_ds_task_instance"
-
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteCommand"
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteErrorCommand"
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteProcessInstance"
-mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -D $mysql_database -e "$deleteTaskInstance"
-
-}
 
 ########################
 # 说明：初始化 mysql
@@ -386,7 +395,7 @@ sh $work_path/bin/whalescheduler-daemon.sh start alert-server
 check_api_server(){
 
     # 查看api log
-    api=`ps -ef|grep api-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-api.log/g'`
+    api=$api_log_path
     echo "开始监控 api"
     echo "tail -f "$api
     tmp=$(tail -n1 $api)
@@ -408,7 +417,7 @@ check_api_server(){
 check_worker_server(){
 
     # 查看worker log
-    worker=`ps -ef|grep worker-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-worker.log/g'`
+    worker=$worker_log_path
     echo "开始监控 worker"
     echo "tail -f "$worker
     tmp=$(tail -n1 $worker)
@@ -431,7 +440,7 @@ check_worker_server(){
 check_master_server(){
 
     # 查看master log
-    master=`ps -ef|grep master-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-master.log/g'`
+    master=$master_log_path
     echo "开始监控 master"
     echo "tail -f "$master
     tmp=$(tail -n1 $master)
@@ -454,7 +463,7 @@ check_master_server(){
 check_alert_server(){
 
     # 查看alert log
-    alert=`ps -ef|grep alert-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-alert.log/g'`
+    alert=$alert_log_path
     echo "开始监控 alert"
     echo "tail -f "$alert
     tmp=$(tail -n1 $alert)
@@ -483,28 +492,27 @@ echo "hi, 请输入监控日志: api|master|worker|alert "
 if [ $log_server == "api" ]
 then
     echo "开始监控api"
-    api=`ps -ef|grep api-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-api.log/g'`
-    echo "tail -f "$api
-    tail -f $api
+    echo $api_log_path
+    echo "tail -f "$api_log_path
+    tail -f $api_log_path
 
 elif [ $log_server == "master" ]
 then
     echo "开始监控master"
-    master=`ps -ef|grep master-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-master.log/g'`
+    master=$master_log_path
     echo "tail -f "$master
     tail -f $master
 elif  [ $log_server == "worker" ]
-
 then
     echo "开始监控worker"
-    worker=`ps -ef|grep worker-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-worker.log/g'`
+    worker=$worker_log_path
     echo "tail -f "$worker
     tail -f $worker
 
 elif  [ $log_server == "alert" ]
 then
     echo "开始监控alert"
-    alert=`ps -ef|grep alert-server|tail -3 | grep -v grep | awk '{print $18}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-alert.log/g'`
+    alert=$alert_log_path
     echo "tail -f "$alert
     tail -f $alert
 fi
@@ -628,16 +636,6 @@ then
 elif [ $p_input == "count_sql" ]
 then
         count_sql
-elif [ $p_input == "delete_sql" ]
-then
-        delete_sql
-elif [ $p_input == "per_run" ]
-then
-        performace_run
-elif [ $p_input == "per_col" ]
-then
-		read -p "输入性能结果命名 " commad
-        performace_collect $commad
 elif [ $p_input == "remote_all_exec_command" ]
 then
 		read -p "多台机器需要执行命令 " commad
@@ -649,16 +647,10 @@ then
 elif [ $p_input == "remote_all_start" ]
 then
         remote_all_start
-elif [ $p_input == "set_all_GMT8" ]
-then
-        set_all_GMT8
-elif [ $p_input == "set_single_GMT8" ]
-then
-        read -p "hi, 请输入修改时区的ip: " ip
-        set_single_GMT8 $ip
 elif [ $p_input == "conf" ]
 then
         echo "1、初始化配置：conf"
+        define_param "today"
         stop_all_server
         tar_file
         init_server
@@ -667,73 +659,37 @@ then
         echo "禁止初始化mysql"
 elif [ $p_input == "restart" ]
 then
-        echo "1、停止/启动：服务"
         stop_all_server
         run_all_server
 elif [ $p_input == "log" ]
 then
-        echo "1、查看日志：log"
         cat_log
 elif [ $p_input == "cat" ]
 then
-        echo "1、查看服务：server"
         cat_server
 elif [ $p_input == "mysql" ]
 then
-        echo "1、链接服务：mysql"
         con_mysql
-elif [ $p_input == "mock_base" ]
-then
-        echo "1、mock 基础服务"
-        mock_base
-elif [ $p_input == "mock_user" ]
-then
-        echo "1、mock 业务服务"
-        mock_user
-elif [ $p_input == "mock_assert" ]
-then
-        echo "1、mock_assert 结果"
-        mock_assert
 elif [ $p_input == "check" ]
 then
-        echo "1、check 服务：api"
         check_api_server
-        echo "2、check 服务：worker"
         check_worker_server
-        echo "3、check 服务：master"
         check_master_server
-        echo "4、check 服务：worker"
         check_alert_server
 elif [ $p_input == "allstop" ]
 then
         stop_all_server
-elif [ $p_input == "restart_day" ]
-then
-        read -p "hi, 请输入启动哪天: today/0613/0614 " p_date
-        if [ $p_date != "today" ]
-        then
-                today=$p_date
-        fi
-        echo "当前" $today
-        define_param
-        stop_all_server
-        run_all_server
 elif [ $p_input == "stop" ]
 then
     hanld_server stop $log_server
 elif [ $p_input == "start" ]
 then
     hanld_server start $log_server
-elif [ $p_input == "tar" ]
-then
-    tar_file
 fi
 
 }
 
-
 p_input=$1
 log_server=$2
-today=`date +%m%d`
-define_param
+define_param "recent_day"
 main_run
