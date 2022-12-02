@@ -189,22 +189,22 @@ main_check(){
         get_mem_status
         get_disk_rw_test
         get_disk_status
-        echo "===== 3、端口/mysql ====="
+        echo "===== 2、端口/mysql ====="
         get_port_status
         get_mysql
-        echo "===== 6、三方服务：jdk ===== "
+        echo "===== 3、三方服务：jdk ===== "
         jdk_check
 
 }
 
 main_set(){
-        echo "===== 2、hosts/ssh ====="
+        echo "===== 1、hosts/ssh ====="
         set_hosts
         set_ssh
-        echo "===== 4、用户权限 ====="
+        echo "===== 2、用户权限 ====="
         set_user_whalescheduler
         set_user_ops
-        echo "===== 5、时区/ntp ====="
+        echo "===== 3、时区/ntp ====="
         set_time
 }
 main_check
