@@ -1,0 +1,17 @@
+# 测试环境
+addr_list=("ws1","ws2","ws3")
+api_list=("ws1")
+worker_list=("ws2")
+alert_list=("ws3")
+master_list=("ws3")
+
+
+
+zk_ip="ws1"
+zk_port=":2181"
+mysql_ip="aws1"
+mysql_user="root"
+mysql_passwd="root@123"
+mysql_database="whalescheduler"
+mysql_port="3306"
+
