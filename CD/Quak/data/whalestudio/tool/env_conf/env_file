@@ -14,4 +14,3 @@ mysql_user="root"
 mysql_passwd="root@123"
 mysql_database="whalescheduler"
 mysql_port="3306"
-

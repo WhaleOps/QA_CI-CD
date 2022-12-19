@@ -22,6 +22,7 @@ tool_path=$work_father_path/tool
 tool_env_conf_path=$work_father_path/tool/env_conf
 jar_path=$work_father_path/jar
 third_package_path=$work_father_path/third_package
+DB_path=$work_father_path/DB
 
 
 
@@ -145,7 +146,7 @@ alert_log_path=`ps -ef|grep alert-server|tail -2 | grep -v grep | awk '{print $1
 ########################
 source_deploy(){
 echo "========== source 环境变量 ========== "
-sed -i '$a\alias deploy="sh /data/whalestudio/tool/deploy_QA.sh"' /etc/profile
+sed -i '$a\alias deploy="bash /data/whalestudio/tool/deploy_QA.sh"' /etc/profile
 source /etc/profile
 }
 
@@ -178,14 +179,14 @@ echo "mysql_port: "$mysql_port
 
 ########################
 # 说明：多台机器执行运维脚本
-# 例：sh ws_sprint_2209.sh allstop
+# 例：bash ws_sprint_2209.sh allstop
 ########################
 remote_all_exec_command(){
 
 for ip in ${addr_list[@]}
 do
-	 echo "ssh $ip sh $deploy_sh $commad"
-     ssh $ip sh $deploy_sh $commad
+	 echo "ssh $ip bash $deploy_sh $commad"
+     ssh $ip bash $deploy_sh $commad
 done
 }
 
@@ -217,8 +218,8 @@ remote_all_start(){
 for ip in ${addr_list[@]}
 do
 	echo "开始停止：" $ip
-	echo "ssh $ip sh $deploy_sh allstop"
-	ssh $ip sh $deploy_sh allstop
+	echo "ssh $ip bash $deploy_sh allstop"
+	ssh $ip bash $deploy_sh allstop
 done
 
 remote_single_start
@@ -233,22 +234,22 @@ remote_single_start(){
 
 for ip in ${api_list[@]}
 do
-ssh $ip "sh $deploy_sh start api-server"
+ssh $ip "bash $deploy_sh start api-server"
 done
 
 for ip in ${worker_list[@]}
 do
-ssh $ip "sh $deploy_sh start worker-server"
+ssh $ip "bash $deploy_sh start worker-server"
 done
 
 for ip in ${master_list[@]}
 do
-ssh $ip "sh $deploy_sh start master-server"
+ssh $ip "bash $deploy_sh start master-server"
 done
 
 for ip in ${alert_list[@]}
 do
-ssh $ip "sh $deploy_sh start alert-server"
+ssh $ip "bash $deploy_sh start alert-server"
 done
 
 }
@@ -388,10 +389,10 @@ case $1 in
 stop_all_server(){
 
 # 停止服务
-sh $current_path/bin/whalescheduler-daemon.sh stop api-server
-sh $current_path/bin/whalescheduler-daemon.sh stop master-server
-sh $current_path/bin/whalescheduler-daemon.sh stop worker-server
-sh $current_path/bin/whalescheduler-daemon.sh stop alert-server
+bash $current_path/bin/whalescheduler-daemon.sh stop api-server
+bash $current_path/bin/whalescheduler-daemon.sh stop master-server
+bash $current_path/bin/whalescheduler-daemon.sh stop worker-server
+bash $current_path/bin/whalescheduler-daemon.sh stop alert-server
 ps -ef|grep api-server|grep -v grep|awk '{print "kill -9 " $2}' |sh
 ps -ef|grep master-server |grep -v grep|awk '{print "kill -9 " $2}' |sh
 ps -ef|grep worker-server |grep -v grep|awk '{print "kill -9 " $2}' |sh
@@ -417,10 +418,10 @@ run_all_server(){
 
 # 运行服务
 echo "$current_path/bin/whalescheduler-daemon.sh start api-server"
-sh $current_path/bin/whalescheduler-daemon.sh start api-server
-sh $current_path/bin/whalescheduler-daemon.sh start master-server
-sh $current_path/bin/whalescheduler-daemon.sh start worker-server
-sh $current_path/bin/whalescheduler-daemon.sh start alert-server
+bash $current_path/bin/whalescheduler-daemon.sh start api-server
+bash $current_path/bin/whalescheduler-daemon.sh start master-server
+bash $current_path/bin/whalescheduler-daemon.sh start worker-server
+bash $current_path/bin/whalescheduler-daemon.sh start alert-server
 
 }
 
@@ -477,12 +478,12 @@ mysql -h$mysql_ip -u$mysql_user -p$mysql_passwd -P$mysql_port -D$mysql_database
 
 ########################
 # 说明：将 备份数据库
-# 例：mysqldump
+# 例：mysql_dump
 ########################
 mysql_dump(){
 
-echo "mysql -h" $mysql_ip "-u" $mysql_user " -P" $mysql_port " -p " $mysql_database
-mysqldump -h$mysql_ip -u$mysql_user -P$mysql_port -p $mysql_database > work_db_path/$mysql_database.sql
+echo "mysqldump -h$mysql_ip -u$mysql_user -P$mysql_port -p$mysql_passwd $mysql_database > $DB_path/$mysql_database"_"$current_day.sql"
+mysqldump -h$mysql_ip -u$mysql_user -P$mysql_port -p$mysql_passwd $mysql_database > $DB_path/$mysql_database"_"$current_day.sql
 
 }
 
@@ -515,11 +516,11 @@ tar -zxvf zookeeper.tar.gz
 cd zookeeper/conf
 sed -i 's/dataDir=/#dataDir=/g' zoo.cfg
 sed -i 's/server.1=localhost/server.1='$zk_ip'/g' zoo.cfg
-sed -i '$a\dataDir='$third_package_path'zookeeper/data' zoo.cfg
-sed -i '$a\dataLogDir='$third_package_path'zookeeper/log' zoo.cfg
+sed -i '$a\dataDir='$third_package_path'/zookeeper/data' zoo.cfg
+sed -i '$a\dataLogDir='$third_package_path'/zookeeper/log' zoo.cfg
 
 # 启动配置，root启动
-sudo sh $third_package_path/zookeeper/bin/zkServer.sh start
+sudo bash $third_package_path/zookeeper/bin/zkServer.sh start
 
 
 }
@@ -552,6 +553,9 @@ main_run(){
 if [ $p_input == "tips" ]
 then
        echo_init_param
+elif [ $p_input == "mysql_dump" ]
+then
+        mysql_dump
 elif [ $p_input == "third_java_install" ]
 then
         third_package_java_install
