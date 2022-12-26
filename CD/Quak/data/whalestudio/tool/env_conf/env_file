@@ -7,7 +7,7 @@ master_list=("ws3")
 
 
 
-zk_ip="ws1"
+zk_ip="ws3"
 zk_port=":2181"
 mysql_ip="aws1"
 mysql_user="root"

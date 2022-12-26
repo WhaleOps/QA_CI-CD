@@ -129,13 +129,13 @@ deploy_sh="$0"
 # 说明：进程日志路径
 ########################
 define_log_path(){
-api_log_path=`ps -ef|grep api-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-api.log/g'`
+api_log_path=`ps -ef|grep api-server|tail -2 | grep -v grep | awk -F "cp" '{print $2}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-api.log/g'`
 
-master_log_path=`ps -ef|grep master-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-master.log/g'`
+master_log_path=`ps -ef|grep master-server|tail -2 | grep -v grep | awk -F "cp" '{print $2}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-master.log/g'`
 
-worker_log_path=`ps -ef|grep worker-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-worker.log/g'`
+worker_log_path=`ps -ef|grep worker-server|tail -2 | grep -v grep | awk -F "cp" '{print $2}'| awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-worker.log/g'`
 
-alert_log_path=`ps -ef|grep alert-server|tail -2 | grep -v grep | awk '{print $19}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-alert.log/g'`
+alert_log_path=`ps -ef|grep alert-server|tail -2 | grep -v grep | awk -F "cp" '{print $2}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-alert.log/g'`
 
 }
 
@@ -297,6 +297,18 @@ tar -zxf $packge_tar
 
 }
 
+########################
+# 说明：查看 submit_id
+########################
+cat_submit_id(){
+
+current_submit_id=`cat $current_path/version.properties | grep abbrev | awk -F "=" '{print $2}'`
+
+echo "current_submit_id: $current_submit_id"
+
+
+}
+
 
 
 ########################
@@ -310,16 +322,16 @@ if [ $is_modify_start_memory == "true" ]
         # 修改master-server 内存
         echo "QA 环境，需修改环境"
         cd $current_path/master-server/bin/
-        sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+        sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms2g -Xmx2g -Xmn256M/g' start.sh
 
         cd $current_path/worker-server/bin/
-        sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+        sed -i 's/-Xms16g -Xmx16g -Xmn8g/-Xms2g -Xmx2g -Xmn256M/g' start.sh
 
         cd $current_path/api-server/bin/
-        sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+        sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms2g -Xmx2g -Xmn256M/g' start.sh
 
         cd $current_path/alert-server/bin/
-        sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms4g -Xmx4g -Xmn1g/g' start.sh
+        sed -i 's/-Xms8g -Xmx8g -Xmn4g/-Xms2g -Xmx2g -Xmn256M/g' start.sh
     else
         echo "非QA 环境，不需要修改start.sh 配置"
     fi
@@ -599,6 +611,9 @@ then
 elif [ $p_input == "allstop" ]
 then
     stop_all_server
+elif [ $p_input == "cat_submit_id" ]
+then
+    cat_submit_id
 elif [ $p_input == "stop" ]
 then
     hanld_server stop $log_server
@@ -607,7 +622,7 @@ then
     hanld_server start $log_server
 elif [ $p_input == "restart_server" ]
 then
-    hanld_server stop $log_server
+    hanld_server s  top $log_server
     hanld_server start $log_server
 elif [ $p_input == "restart" ]
 then
