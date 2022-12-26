@@ -11,20 +11,13 @@ read_test='vda1'
 # 结果名称
 RESULTFILE="InstallCheck-`hostname`-`date +%Y%m%d`.txt"
 
-zk_ip="ctyun6"
-zk_port=":2181"
-mysql_ip="ctyun6"
-mysql_user="root"
-mysql_passwd="root@123"
-mysql_database="whalescheduler"
-mysql_port="3306"
 
 # 定义读取环境
-#env_file=$tool_env_conf_path/env_file
+env_file=/data/whalestudio/tool/env_conf/env_file
 
-#while read line;do
-#    eval "$line"
-#done < $env_file
+while read line;do
+    eval "$line"
+done < $env_file
 
 }
 
