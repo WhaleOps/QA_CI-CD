@@ -73,7 +73,7 @@ function get_disk_rw_test(){
 
 function get_disk_status(){
     echo -e "\033[1;32m******************************************************* data 目录挂载情况 *******************************************************\033[0m"
-    tmp=`df -h /data | grep data | awk '{print $4}'`
+    tmp=`df -h /data | awk '{print $4}'`
     data_size=${tmp: : -1}
 
 
