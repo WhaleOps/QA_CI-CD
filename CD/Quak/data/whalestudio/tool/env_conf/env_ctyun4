@@ -7,9 +7,9 @@ master_list=("ws3")
 
 
 
-zk_ip="ctyun5"
+zk_ip="ctyun4"
 zk_port=":2181"
-mysql_ip="ctyun5"
+mysql_ip="ctyun4"
 mysql_user="root"
 mysql_passwd="root@123"
 mysql_database="whalescheduler"
