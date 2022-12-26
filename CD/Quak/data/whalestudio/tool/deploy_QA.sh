@@ -129,6 +129,7 @@ deploy_sh="$0"
 # 说明：进程日志路径
 ########################
 define_log_path(){
+# add log
 api_log_path=`ps -ef|grep api-server|tail -2 | grep -v grep | awk -F "cp" '{print $2}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-api.log/g'`
 
 master_log_path=`ps -ef|grep master-server|tail -2 | grep -v grep | awk -F "cp" '{print $2}' | awk -F ":" '{print $1}' | sed 's/conf/logs\/whalescheduler-master.log/g'`
