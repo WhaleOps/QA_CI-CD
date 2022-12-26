@@ -1,46 +1,7 @@
 #!/bin/bash
 
 ########################
-# 说明：创建文件夹
-########################
-create_folder(){
-
-day=$1
-
-# 定义日期
-get_current_day $day
-
-
-# 版本路径
-version_path=$version"_"$current_day
-
-# 定义程序目录、工具目录
-current_path=$work_father_path/current/$packge
-current_package_path=$work_father_path/current_package/$version"_"$current_day
-package_path=$work_father_path/package
-tool_path=$work_father_path/tool
-tool_env_conf_path=$work_father_path/tool/env_conf
-jar_path=$work_father_path/jar
-third_package_path=$work_father_path/third_package
-DB_path=$work_father_path/DB
-
-
-
-# 创建目录
-mkdir -p $current_path
-mkdir -p $current_package_path
-mkdir -p $package_path
-mkdir -p $tool_path
-mkdir -p $tool_env_conf_path
-mkdir -p $jar_path
-
-
-}
-
-
-
-########################
-# 说明：设置软连接到 current_package
+# 说明：软连接 current 到 current_package下最新版本
 ########################
 ln_current_package(){
 # 软连接 删除
@@ -55,24 +16,35 @@ ln -s $current_package_path/$packge current
 }
 
 ########################
-# 说明：生成时间
+# 说明：软链接 current 到 current_package下最新版本
 ########################
-get_current_day(){
-    day=$1
+get_current_path(){
+    install_time=$1
     cd $work_father_path/current_package
-    if [ $day == "today" ]
+    if [ $install_time == "first_install" ]
     then
-        current_day=`date +%m%d`
-        echo "今日 day："$current_day
-    elif [ $day == "recent_day" ]
-    then
-        # 获取最新安装包后面的日期，例：file_name是 v2.3.6_1210，获取到 1210
-        file_name=`ls -Art |grep $version | tail -n 1`
-        current_day=${file_name:0-4}
-        echo "最新 day："$current_day
+        current_day=`date +%m%d%H`
+        echo "首次安装，需要创建current目录"
+        echo "当前current目录是：" $work_father_path/current_package/$version"_"$current_day
+        # 如果是 first_install 则创建新目录，非 first_install 则获取最新目录
+        current_path=$work_father_path/current/$packge
+        current_package_path=$work_father_path/current_package/$version"_"$current_day
+        mkdir -p $current_path
+        mkdir -p $current_package_path
+
+        # 软连接 current 到 current_package下最新版本
+        ln_current_package
     else
-        echo "非法日期"
+        # 获取最新安装包后面的日期，例：file_name是 v2.3.6_122622，获取到 122622
+        file_name=`ls -Art |grep $version | tail -n 1`
+        current_day=${file_name:0-6}
+        echo "当前current目录是：" $work_father_path/current_package/$version"_"$current_day
+        current_path=$work_father_path/current/$packge
+        current_package_path=$work_father_path/current_package/$version"_"$current_day
     fi
+
+
+
 }
 
 
@@ -101,10 +73,38 @@ done < $env_work_path
 
 }
 
+
+########################
+# 说明：创建文件夹
+########################
+create_folder(){
+
+# 定义程序目录、工具目录
+package_path=$work_father_path/package
+tool_path=$work_father_path/tool
+tool_env_conf_path=$work_father_path/tool/env_conf
+jar_path=$work_father_path/jar
+third_package_path=$work_father_path/third_package
+DB_path=$work_father_path/DB
+
+# 创建目录
+mkdir -p $package_path
+mkdir -p $tool_path
+mkdir -p $tool_env_conf_path
+mkdir -p $jar_path
+mkdir -p $third_package_path
+mkdir -p $DB_path
+
+
+}
+
 ########################
 # 说明：定义参数
 ########################
 define_param(){
+
+# first_install 会创建新文件夹，非 first_install则获取 /data/whalestudio/current_package/v2.3.6_122622
+install_time=$1
 
 # 定义packge包名
 packge_tar=whalescheduler-1.0-SNAPSHOT-bin.tar.gz
@@ -113,8 +113,11 @@ packge=whalescheduler-1.0-SNAPSHOT-bin
 # 读取环境信息
 read_file_param
 
-# 创建文件夹
-create_folder $1
+# 创建 package、tool、third_package、jar_path、DB_path 文件夹
+create_folder
+
+# 创建 current 软连接到 current_package
+get_current_path $install_time
 
 # 定义日志路径
 define_log_path
@@ -580,14 +583,12 @@ then
        source_deploy
 elif [ $p_input == "first_install" ]
 then
-        define_param "today"
-        ln_current_package
+        define_param $p_input
         tar_file
         init_server
 elif [ $p_input == "other_first_install" ]
 then
         remote_all_exec_command "define_param 'today'"
-        remote_all_exec_command "ln_current_package"
         remote_all_exec_command "tar_file"
         remote_all_exec_command "init_server"
 elif [ $p_input == "all_start" ]
