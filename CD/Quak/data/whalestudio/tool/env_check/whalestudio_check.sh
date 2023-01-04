@@ -9,7 +9,7 @@ function init_param(){
 read_test='vda1'
 
 # 结果名称
-RESULTFILE="InstallCheck-`hostname`-`date +%Y%m%d`.txt"
+RESULTFILE="install_check-`date +%Y%m%d`.txt"
 
 
 # 定义读取环境

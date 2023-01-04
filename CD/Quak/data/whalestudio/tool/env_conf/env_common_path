@@ -1,12 +1,5 @@
 # 定义主目录
 work_father_path="/data/whalestudio"
 
-# 定义version版本
-version="v2.3.6"
-
 # 是否需要修改start.sh 运行内存, true 修改
 is_modify_start_memory=true
-
-# 定义DB目录
-work_db_path="/data/whalestudio/DB"
-

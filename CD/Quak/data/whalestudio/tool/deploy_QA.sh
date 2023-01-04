@@ -16,6 +16,24 @@ ln -s $current_package_path/$packge current
 }
 
 ########################
+# 说明：获取 /data/whalestudio/package 下最新包的 version
+########################
+get_version(){
+cd $work_father_path/package
+
+# 获取 version
+version=`ls -Art | tail -n 1 | awk -F "_" '{print $2}'`
+echo "当前/data/whalestudio/package 最新版本是：$version"
+
+# 获取 packge
+packge_tar=`ls -Art | tail -n 1`
+packge=`ls -Art | tail -n 1 | awk -F "_" '{print $1}'`
+
+
+
+}
+
+########################
 # 说明：软链接 current 到 current_package下最新版本
 ########################
 get_current_path(){
@@ -43,8 +61,6 @@ get_current_path(){
         current_package_path=$work_father_path/current_package/$version"_"$current_day
     fi
 
-
-
 }
 
 
@@ -69,6 +85,9 @@ done < $env_file
 while read line;do
     eval "$line"
 done < $env_work_path
+
+# 获取版本
+get_version
 
 
 }
@@ -106,12 +125,9 @@ define_param(){
 # first_install 会创建新文件夹，非 first_install则获取 /data/whalestudio/current_package/v2.3.6_122622
 install_time=$1
 
-# 定义packge包名
-packge_tar=whalescheduler-1.0-SNAPSHOT-bin.tar.gz
-packge=whalescheduler-1.0-SNAPSHOT-bin
-
 # 读取环境信息
 read_file_param
+
 
 # 创建 package、tool、third_package、jar_path、DB_path 文件夹
 create_folder
@@ -169,6 +185,7 @@ echo "package_path 目录："$package_path
 echo "tool_path 目录："$tool_path
 echo "tool_env_conf_path 目录："$tool_env_conf_path
 echo "jar_path 目录："$jar_path
+echo "version: $version"
 
 echo "=========== mysql/zk ========"
 echo "mysql_ip地址："$mysql_ip
@@ -506,7 +523,7 @@ mysqldump -h$mysql_ip -u$mysql_user -P$mysql_port -p$mysql_passwd $mysql_databas
 ########################
 # 说明：三方服务安装,java 安装
 ########################
-third_package_java_install(){
+third_java_install(){
 
 cd $third_package_path/
 tar -zxvf jdk1.8.0_151.tar.gz
@@ -520,7 +537,7 @@ source /etc/profile
 ########################
 # 说明：三方服务安装,zookeeper 安装
 ########################
-third_package_zk_install(){
+third_zk_install(){
 
 # 创建目录
 mkdir -p $third_package_path/zookeeper/data
@@ -541,6 +558,31 @@ sudo bash $third_package_path/zookeeper/bin/zkServer.sh start
 
 }
 
+########################
+# 说明：T0case 运行
+########################
+mock_base(){
+
+mkdir -p $tool_path/auto_test
+cd $tool_path/auto_test
+echo "基础服务mock：开始"
+/data/whalestudio/tool/node/bin/newman run $tool_path/auto_test/01-T0用例-zhongxin_master.postman_collection.json --delay-request 10 --working-dir $tool_path/auto_test -e $tool_path/auto_test/test_env.postman_environment.json -r cli,html | tee mock.txt
+echo "基础服务mock：结束"
+
+}
+
+mock_assert(){
+
+        res=`cat $tool_path/auto_test/mock.txt | grep AssertionError | head -1`
+        assert=AssertionError
+        if [[ "$res" == *"$assert"* ]]
+        then
+        echo "test_case contain Error!!!"
+        exit 1
+        else
+        echo "all test_case running ok"
+        fi
+}
 
 tips(){
 
@@ -574,10 +616,10 @@ then
         mysql_dump
 elif [ $p_input == "third_java_install" ]
 then
-        third_package_java_install
+        third_java_install
 elif [ $p_input == "third_zk_install" ]
 then
-        third_package_zk_install
+        third_zk_install
 elif [ $p_input == "source_deploy" ]
 then
        source_deploy
@@ -610,6 +652,12 @@ then
 elif [ $p_input == "mysql" ]
 then
         con_mysql
+elif [ $p_input == "mock_base" ]
+then
+        mock_base
+elif [ $p_input == "mock_assert" ]
+then
+        mock_assert
 elif [ $p_input == "allstop" ]
 then
     stop_all_server
