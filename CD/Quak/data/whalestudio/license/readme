@@ -1,0 +1,20 @@
+1、拷贝其他机器
+
+2、获取mac码
+java -jar whale-license-client.jar
+
+3、ctyun4 上启动生成license服务
+cd /opt/program/WhaleopsLicense/whale-admin-1.0-SNAPSHOT-bin
+./bin/whale-admin-daemon.sh start api-server
+
+4、ctyun4 生成license
+curl --location --request POST 'http://127.0.0.1:22346/whale-admin/license' \
+--header 'Content-Type: application/json' \
+--data '{
+    "customerName":"test",
+    "licenseVersionEnum":"ADVANCED",
+    "startTime": 1670330485132,
+    "endTime": 1704038399000,
+    "maxMachineNumber":10,
+    "machineList": ["fa:16:3e:ff:fe:16:d1:d7"]
+}'
